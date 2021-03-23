@@ -36,7 +36,7 @@ ABC_rejection <- function(input_data, model, prior, line, validation = "max_dist
   cl <- parallel::makeCluster(cores)
   doParallel::registerDoParallel(cl)
 
-  routepaths <- foreach::foreach(prior = iterators::iter(prior, by = 'row'), .combine=rbind, .packages='routepath') %dopar%
+  routepaths <- foreach::foreach(prior = iterators::iter(prior, by = 'row'), .combine=rbind) %dopar%
     {
       cost_surface <- model(input_data = input_data, prior = prior)
       points <- extract_end_points(line = line)

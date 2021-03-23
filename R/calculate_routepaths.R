@@ -1,8 +1,28 @@
+#' Calculates route path from start and end locations of lines using user-supplied cost surface
+#'
+#' This function calculates the route path from the start and end locations of lines using a user-supplied cost surface
+#'
+#' @details xxx
+#'
+#' @param cost_surface TransitionMatrix
+#'
+#' @param locations Start and End SpatialPoints returned from extract_end_points()
+#'
+#' @return SpatialLines of route paths from start to end locations
+#'
+#' @author Joseph Lewis
+#'
+#' @import foreach
+#' @import leastcostpath
+#'
+#' @export
+#'
+
 calculate_routepaths <- function(cost_surface, locations) {
 
-  loc_matrix <- matrix(c(from = seq(from = 1, to = length(locations), by = 2), to = seq(from = 2, to = length(locations), by = 2)), ncol = 2)
+  loc_matrix <- base::matrix(c(from = base::seq(from = 1, to = base::length(locations), by = 2), to = base::seq(from = 2, to = base::length(locations), by = 2)), ncol = 2)
 
-  routepaths <- create_lcp_network(cost_surface = cost_surface, locations = locations, nb_matrix = loc_matrix)
+  routepaths <- leastcostpath::create_lcp_network(cost_surface = cost_surface, locations = locations, nb_matrix = loc_matrix)
 
   return(routepaths)
 

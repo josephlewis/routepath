@@ -17,3 +17,11 @@ URL: https://github.com/josephlewis/routepath
 BugReports: https://github.com/josephlewis/routepath/issues
 Suggests: 
     testthat
+Imports: 
+    parallel,
+    doParallel,
+    foreach,
+    leastcostpath,
+    sp,
+    iterators,
+    methods

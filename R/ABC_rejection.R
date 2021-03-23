@@ -2,7 +2,7 @@
 #'
 #' This function launches a series of model simulations with model parameters drawn from prior_matrix
 #'
-#' @details
+#' @details xxx
 #'
 #' @param input_data a list of input data to be used in the route modelling process
 #'
@@ -18,40 +18,34 @@
 #'
 #' @param tol tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.
 #'
+#' @param cores Number of cores
+#'
 #' @return xx
 #'
 #' @author Joseph Lewis
 #'
-#' @export
+#' @import parallel
+#' @import doParallel
+#' @import foreach
+#' @import iterators
 #'
-#' @examples
+#' @export
 
-ABC_rejection <- function(input_data, model, prior, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1) {
+ABC_rejection <- function(input_data, model, prior, line, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1) {
 
   cl <- parallel::makeCluster(cores)
   doParallel::registerDoParallel(cl)
 
-  routepaths <- foreach(prior = iterators::iter(prior, by = 'row'), .combine=rbind) %dopar%
+  routepaths <- foreach::foreach(prior = iterators::iter(prior, by = 'row'), .combine=rbind, .packages='routepath') %dopar%
     {
       cost_surface <- model(input_data = input_data, prior = prior)
-      points <- extract_end_points(lines = lines)
+      points <- extract_end_points(line = line)
       routes <- calculate_routepaths(cost_surface = cost_surface, locations = points)
 
     }
 
   parallel::stopCluster(cl)
 
-  # lcps <- pbapply::pbapply(X = prior, MARGIN = 1, FUN = function(x) {
-  #
-  #   cs <- model(input_data = input_data, prior = x)
-  #
-  #   pts <- extract_end_points(lines = lines)
-  #
-  #   lcps <- calculate_routepaths(cost_surface = cs, locations = pts)
-  #
-  # })
-  #
-  # lcps <- do.call(rbind, lcps)
 }
 
 

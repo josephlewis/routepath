@@ -4,9 +4,11 @@
 #'
 #' @details xxx
 #'
-#' @param line SpatialLines
+#' @param lines SpatialLines
 #'
 #' @return SpatialPoints of Start and End of supplied lines
+#'
+#' @keywords internal
 #'
 #' @author Joseph Lewis
 #'
@@ -15,16 +17,12 @@
 #' @import methods
 #'
 #' @export
-#'
 
-extract_end_points <- function(line) {
+extract_end_points <- function(lines) {
 
-  utils::globalVariables("i")
-
-  end_points <- foreach::foreach(i = 1:length(line), .combine = rbind) %do%
-    {
-      sp::SpatialPoints(sp::coordinates(methods::as(line[i,], "SpatialPoints"))[c(1,nrow(sp::coordinates(methods::as(line[i,], "SpatialPoints")))),])
+    end_points <- foreach::foreach(line_no = 1:length(lines), .combine = rbind) %do% {
+        sp::SpatialPoints(sp::coordinates(methods::as(lines[line_no, ], "SpatialPoints"))[c(1, nrow(sp::coordinates(methods::as(lines[line_no, ], "SpatialPoints")))), ])
     }
 
-  return(end_points)
+    return(end_points)
 }

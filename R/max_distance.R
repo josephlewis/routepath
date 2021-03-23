@@ -19,12 +19,14 @@
 #'
 #' @export
 
-calculate_routepaths <- function(cost_surface, locations) {
+max_distance <- function(routepaths, lines, matrix){
 
-    loc_matrix <- base::matrix(c(from = base::seq(from = 1, to = base::length(locations), by = 2), to = base::seq(from = 2, to = base::length(locations), by = 2)), ncol = 2)
+  distances <- foreach(index=iterators::iter(matrix, by='row'), .combine = "c") %do% {
 
-    routepaths <- leastcostpath::create_lcp_network(cost_surface = cost_surface, locations = locations, nb_matrix = loc_matrix)
+    max_dist <- max(rgeos::gDistance(spgeom1 = as(routepaths[index[1], ], "SpatialPoints"), spgeom2 = lines[index[2], ], byid = TRUE))
 
-    return(routepaths)
+  }
+
+  return(distances)
 
 }

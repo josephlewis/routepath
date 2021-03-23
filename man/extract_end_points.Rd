@@ -4,10 +4,10 @@
 \alias{extract_end_points}
 \title{Extract Start and End SpatialPoints from SpatialLines}
 \usage{
-extract_end_points(line)
+extract_end_points(lines)
 }
 \arguments{
-\item{line}{SpatialLines}
+\item{lines}{SpatialLines}
 }
 \value{
 SpatialPoints of Start and End of supplied lines
@@ -21,3 +21,4 @@ xxx
 \author{
 Joseph Lewis
 }
+\keyword{internal}

@@ -7,12 +7,11 @@
 ABC_rejection(
   input_data,
   model,
-  prior,
-  line,
+  priors,
+  lines,
   validation = "max_distance",
   summary_stat_target = 0,
-  tol = 1,
-  cores = 1
+  tol = 1
 )
 }
 \arguments{
@@ -20,23 +19,21 @@ ABC_rejection(
 
 \item{model}{an R function implementing the route model to be simulated.}
 
-\item{prior}{a matrix of priors.}
+\item{priors}{a matrix of priors.}
 
-\item{line}{a SpatialLines to be used when comparing against the simulated routes}
+\item{lines}{a SpatialLines to be used when comparing against the simulated routes}
 
 \item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'}
 
 \item{summary_stat_target}{a vector containing the targeted (observed) summary statistics.}
 
 \item{tol}{tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.}
-
-\item{cores}{Number of cores}
 }
 \value{
 xx
 }
 \description{
-This function launches a series of model simulations with model parameters drawn from prior_matrix
+This function launches a series of model simulations with model parameters drawn from the user-supplied prior values.
 }
 \details{
 xxx

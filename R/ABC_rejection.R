@@ -18,6 +18,8 @@
 #'
 #' @param tol tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.
 #'
+#' @param cores xx
+#'
 #' @return xx
 #'
 #' @author Joseph Lewis
@@ -29,14 +31,12 @@
 #'
 #' @export
 
-ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1) {
+ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1) {
 
-    # cl <- parallel::makeCluster(cores)
-    # doParallel::registerDoParallel(cl)
+    cl <- parallel::makeCluster(cores)
+    doParallel::registerDoParallel(cl)
 
-    routepaths <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind") %do% {
-
-      print(paste0("Iteration: ", row_no))
+    routepaths <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind", .packages = 'routepath') %dopar% {
 
       cost_surface <- model(input_data, priors[row_no,])
       points <- extract_end_points(lines = lines)
@@ -44,7 +44,7 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
 
     }
 
-    # parallel::stopCluster(cl)
+    parallel::stopCluster(cl)
 
     posterior <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation, summary_stat_target = summary_stat_target, tol = tol)
 

@@ -11,7 +11,8 @@ ABC_rejection(
   lines,
   validation = "max_distance",
   summary_stat_target = 0,
-  tol = 1
+  tol = 1,
+  cores = 1
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ ABC_rejection(
 \item{summary_stat_target}{a vector containing the targeted (observed) summary statistics.}
 
 \item{tol}{tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.}
+
+\item{cores}{xx}
 }
 \value{
 xx

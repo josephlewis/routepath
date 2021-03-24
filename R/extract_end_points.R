@@ -2,8 +2,6 @@
 #'
 #' This function extracts the start and end points from the supplied lines.
 #'
-#' @details xxx
-#'
 #' @param lines SpatialLines
 #'
 #' @return SpatialPoints of Start and End of supplied lines
@@ -15,8 +13,6 @@
 #' @import foreach
 #' @import sp
 #' @import methods
-#'
-#' @export
 
 extract_end_points <- function(lines) {
 

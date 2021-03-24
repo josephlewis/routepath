@@ -17,9 +17,6 @@ SpatialLines of route paths from start to end locations
 \description{
 This function calculates the route path from the start and end locations of lines using a user-supplied cost surface
 }
-\details{
-xxx
-}
 \author{
 Joseph Lewis
 }

@@ -15,9 +15,6 @@ SpatialPoints of Start and End of supplied lines
 \description{
 This function extracts the start and end points from the supplied lines.
 }
-\details{
-xxx
-}
 \author{
 Joseph Lewis
 }

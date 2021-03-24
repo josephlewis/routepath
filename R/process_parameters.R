@@ -1,4 +1,22 @@
+#' Process prior parameter values
+#'
+#' @param routepaths simulated route paths
+#'
+#' @param lines SpatialLines
+#'
+#' @param priors prior parameter values
+#'
+#' @param validation Method to compare simulated route paths against lines
+#'
+#' @return list of prior parameter values
+#'
 #' @keywords internal
+#'
+#' @author Joseph Lewis
+#'
+#' @import foreach
+#' @import sp
+#' @import methods
 
 process_parameters <- function(routepaths, lines, priors, validation) {
 

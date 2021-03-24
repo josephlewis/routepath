@@ -1,4 +1,18 @@
+#' Process parameter values from Rejection sampling scheme for ABC
+#'
+#' @param parameters accepted parameter values
+#'
+#' @param lines SpatialLines
+#'
+#' @return Matrix of accepted prior parameter values
+#'
 #' @keywords internal
+#'
+#' @author Joseph Lewis
+#'
+#' @import foreach
+#' @import sp
+#' @import methods
 
 process_abc <- function(parameters = param_reject, lines = lines) {
 

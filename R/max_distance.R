@@ -2,8 +2,6 @@
 #'
 #' This function calculates the route path from the start and end locations of lines using a user-supplied cost surface
 #'
-#' @details xxx
-#'
 #' @param cost_surface TransitionMatrix
 #'
 #' @param locations Start and End SpatialPoints returned from extract_end_points()
@@ -16,8 +14,6 @@
 #'
 #' @import foreach
 #' @import leastcostpath
-#'
-#' @export
 
 max_distance <- function(routepaths, lines, matrix){
 

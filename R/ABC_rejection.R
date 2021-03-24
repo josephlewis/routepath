@@ -10,7 +10,7 @@
 #'
 #' @param model an R function implementing the route model to be simulated.
 #'
-#' @param lines a SpatialLines to be used when comparing against the simulated routes
+#' @param lines a SpatialLines to be used when comparing against the simulated route paths
 #'
 #' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'
 #'
@@ -19,6 +19,8 @@
 #' @param tol tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.
 #'
 #' @param cores xx
+#'
+#' @param sim_routes if TRUE simulated route paths are also returned
 #'
 #' @return xx
 #'
@@ -31,7 +33,7 @@
 #'
 #' @export
 
-ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1) {
+ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, sim_routes = FALSE) {
 
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
@@ -46,11 +48,23 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
 
     parallel::stopCluster(cl)
 
-    posterior <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation, summary_stat_target = summary_stat_target, tol = tol)
+    processed_params <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation)
+    param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = summary_stat_target , tol = tol)
+    processed_abc <- process_abc(parameters = param_reject, lines = lines)
 
-    return(posterior)
+    if (sim_routes) {
+
+    index <-abc_index(parameters = param_reject)
+
+    routepaths <- routepaths[index,]
+
+    routepaths@data <- data.frame(processed_abc)
+    colnames(routepaths@data) <- colnames(processed_abc)
+
+    processed_abc <- routepaths
+
+      }
+
+    return(routepaths)
 
 }
-
-
-

@@ -12,7 +12,8 @@ ABC_rejection(
   validation = "max_distance",
   summary_stat_target = 0,
   tol = 1,
-  cores = 1
+  cores = 1,
+  sim_routes = FALSE
 )
 }
 \arguments{
@@ -22,7 +23,7 @@ ABC_rejection(
 
 \item{priors}{a matrix of priors.}
 
-\item{lines}{a SpatialLines to be used when comparing against the simulated routes}
+\item{lines}{a SpatialLines to be used when comparing against the simulated route paths}
 
 \item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'}
 
@@ -31,6 +32,8 @@ ABC_rejection(
 \item{tol}{tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.}
 
 \item{cores}{xx}
+
+\item{sim_routes}{if TRUE simulated route paths are also returned}
 }
 \value{
 xx

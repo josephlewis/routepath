@@ -22,7 +22,9 @@
 #'
 #' @param sim_routes if TRUE simulated route paths are also returned
 #'
-#' @return xx
+#' @param output if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.
+#'
+#' @return Matrix or SpatialLinesDataFrame dependent on output argument
 #'
 #' @author Joseph Lewis
 #'
@@ -33,7 +35,7 @@
 #'
 #' @export
 
-ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, sim_routes = FALSE) {
+ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, output = "matrix") {
 
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
@@ -52,19 +54,18 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
     param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = summary_stat_target , tol = tol)
     processed_abc <- process_abc(parameters = param_reject, lines = lines)
 
-    if (sim_routes) {
+    if (output == "matrix") {
+      processed_abc <- processed_abc
 
-    index <-abc_index(parameters = param_reject)
+    } else if (output == "routes") {
+      index <- abc_index(parameters = param_reject)
+      routepaths <- routepaths[index,]
+      routepaths@data <- data.frame(processed_abc)
+      colnames(routepaths@data) <- colnames(processed_abc)
 
-    routepaths <- routepaths[index,]
+      processed_abc <- routepaths
+    }
 
-    routepaths@data <- data.frame(processed_abc)
-    colnames(routepaths@data) <- colnames(processed_abc)
-
-    processed_abc <- routepaths
-
-      }
-
-    return(routepaths)
+    return(processed_abc)
 
 }

@@ -13,7 +13,7 @@ ABC_rejection(
   summary_stat_target = 0,
   tol = 1,
   cores = 1,
-  sim_routes = FALSE
+  output = "matrix"
 )
 }
 \arguments{
@@ -33,10 +33,12 @@ ABC_rejection(
 
 \item{cores}{xx}
 
+\item{output}{if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.}
+
 \item{sim_routes}{if TRUE simulated route paths are also returned}
 }
 \value{
-xx
+Matrix or SpatialLinesDataFrame dependent on output argument
 }
 \description{
 This function launches a series of model simulations with model parameters drawn from the user-supplied prior values.

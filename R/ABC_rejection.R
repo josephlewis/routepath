@@ -20,8 +20,6 @@
 #'
 #' @param cores xx
 #'
-#' @param sim_routes if TRUE simulated route paths are also returned
-#'
 #' @param output if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.
 #'
 #' @return Matrix or SpatialLinesDataFrame dependent on output argument
@@ -29,18 +27,21 @@
 #' @author Joseph Lewis
 #'
 #' @import parallel
-#' @import doParallel
+#' @import doSNOW
 #' @import foreach
 #' @import abc
-#'
+#' @import utils
 #' @export
 
 ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, output = "matrix") {
 
     cl <- parallel::makeCluster(cores)
-    doParallel::registerDoParallel(cl)
+    doSNOW::registerDoSNOW(cl)
+    pb <- utils::txtProgressBar(max = nrow(priors), style = 3)
+    progress <- function(n) utils::setTxtProgressBar(pb, n)
+    opts <- list(progress = progress)
 
-    routepaths <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind", .packages = 'routepath') %dopar% {
+    routepaths <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind", .packages = 'routepath', .options.snow = opts) %dopar% {
 
       cost_surface <- model(input_data, priors[row_no,])
       points <- extract_end_points(lines = lines)
@@ -48,6 +49,7 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
 
     }
 
+    close(pb)
     parallel::stopCluster(cl)
 
     processed_params <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation)

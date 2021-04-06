@@ -19,11 +19,12 @@ Suggests:
     testthat
 Imports: 
     parallel,
-    doParallel,
+    doSNOW,
     foreach,
     rgeos,
     sp,
     leastcostpath,
     abc,
     iterators,
-    methods
+    methods,
+    utils

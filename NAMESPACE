@@ -2,9 +2,10 @@
 
 export(ABC_rejection)
 import(abc)
-import(doParallel)
+import(doSNOW)
 import(foreach)
 import(leastcostpath)
 import(methods)
 import(parallel)
 import(sp)
+import(utils)

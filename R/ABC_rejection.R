@@ -26,16 +26,17 @@
 #'
 #' @author Joseph Lewis
 #'
-#' @import parallel
+#' @import snow
 #' @import doSNOW
 #' @import foreach
 #' @import abc
 #' @import utils
+#'
 #' @export
 
 ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, output = "matrix") {
 
-    cl <- parallel::makeCluster(cores)
+    cl <- snow::makeCluster(cores)
     doSNOW::registerDoSNOW(cl)
     pb <- utils::txtProgressBar(max = nrow(priors), style = 3)
     progress <- function(n) utils::setTxtProgressBar(pb, n)
@@ -50,7 +51,7 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
     }
 
     close(pb)
-    parallel::stopCluster(cl)
+    snow::stopCluster(cl)
 
     processed_params <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation)
     param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = summary_stat_target , tol = tol)

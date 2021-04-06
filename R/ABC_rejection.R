@@ -36,7 +36,7 @@
 
 ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, output = "matrix") {
 
-    cl <- snow::makeCluster(cores)
+    cl <- snow::makeCluster(cores, type = "SOCK")
     doSNOW::registerDoSNOW(cl)
     pb <- utils::txtProgressBar(max = nrow(priors), style = 3)
     progress <- function(n) utils::setTxtProgressBar(pb, n)

@@ -2,15 +2,15 @@
 % Please edit documentation in R/extract_end_points.R
 \name{extract_end_points}
 \alias{extract_end_points}
-\title{Extract Start and End SpatialPoints from SpatialLines}
+\title{Extract Start and End Points from Lines}
 \usage{
 extract_end_points(lines)
 }
 \arguments{
-\item{lines}{SpatialLines}
+\item{lines}{sp SpatialLines}
 }
 \value{
-SpatialPoints of Start and End of supplied lines
+sp points of Start and End of supplied lines
 }
 \description{
 This function extracts the start and end points from the supplied lines.

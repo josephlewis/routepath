@@ -7,8 +7,8 @@
 abc_reject(
   parameters = processed_params,
   lines = lines,
-  summary_stat_target = summary_stat_target,
-  tol = tol
+  summary_stat_target = 0,
+  tol = 1
 )
 }
 \arguments{

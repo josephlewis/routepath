@@ -35,7 +35,7 @@
 #'
 #' @export
 
-ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", tol = NULL, cores = 1, output = "matrix", drop = TRUE) {
+ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", tol = NULL, cores = 1, output = "matrix", drop = FALSE) {
 
     cl <- snow::makeCluster(cores, type = "SOCK")
     doSNOW::registerDoSNOW(cl)

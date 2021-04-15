@@ -13,7 +13,7 @@ ABC_rejection(
   tol = NULL,
   cores = 1,
   output = "matrix",
-  drop = TRUE
+  drop = FALSE
 )
 }
 \arguments{

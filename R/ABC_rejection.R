@@ -14,13 +14,14 @@
 #'
 #' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'
 #'
-#' @param summary_stat_target a vector containing the targeted (observed) summary statistics.
 #'
-#' @param tol tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.
+#' @param tol tolerance. If NULL returns all simulations
 #'
 #' @param cores xx
 #'
 #' @param output if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.
+#'
+#' @param drop if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.
 #'
 #' @return Matrix or SpatialLinesDataFrame dependent on output argument
 #'
@@ -34,7 +35,7 @@
 #'
 #' @export
 
-ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", summary_stat_target = 0, tol = 1, cores = 1, output = "matrix") {
+ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", tol = NULL, cores = 1, output = "matrix", drop = TRUE) {
 
     cl <- snow::makeCluster(cores, type = "SOCK")
     doSNOW::registerDoSNOW(cl)
@@ -54,20 +55,26 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
     snow::stopCluster(cl)
 
     processed_params <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation)
-    param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = summary_stat_target , tol = tol)
+    param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = 0 , tol = 1)
     processed_abc <- process_abc(parameters = param_reject, lines = lines)
 
     if (output == "matrix") {
-      processed_abc <- processed_abc
-
+      processed_abc <- data.frame(processed_abc)
     } else if (output == "routes") {
-      index <- abc_index(parameters = param_reject)
-      routepaths <- routepaths[index,]
       routepaths@data <- data.frame(processed_abc)
       colnames(routepaths@data) <- colnames(processed_abc)
-
       processed_abc <- routepaths
     }
+
+    processed_abc$result <- "Accept"
+
+    if (!is.null(tol)) {
+      processed_abc$result[processed_abc$stats >= tol] <- "Reject"
+    }
+
+    if (drop) {
+      processed_abc <- processed_abc[processed_abc$result == "Accept",]
+      }
 
     return(processed_abc)
 

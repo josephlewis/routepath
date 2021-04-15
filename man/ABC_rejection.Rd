@@ -10,10 +10,10 @@ ABC_rejection(
   priors,
   lines,
   validation = "max_distance",
-  summary_stat_target = 0,
-  tol = 1,
+  tol = NULL,
   cores = 1,
-  output = "matrix"
+  output = "matrix",
+  drop = TRUE
 )
 }
 \arguments{
@@ -27,13 +27,13 @@ ABC_rejection(
 
 \item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'}
 
-\item{summary_stat_target}{a vector containing the targeted (observed) summary statistics.}
-
-\item{tol}{tolerance, a strictly positive number (between 0 and 1) indicating the proportion of simulations retained nearest the targeted summary statistics.}
+\item{tol}{tolerance. If NULL returns all simulations}
 
 \item{cores}{xx}
 
 \item{output}{if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.}
+
+\item{drop}{if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.}
 }
 \value{
 Matrix or SpatialLinesDataFrame dependent on output argument

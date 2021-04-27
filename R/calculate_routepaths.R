@@ -21,6 +21,8 @@ calculate_routepaths <- function(cost_surface, locations) {
 
     routepaths <- leastcostpath::create_lcp_network(cost_surface = cost_surface, locations = locations, nb_matrix = loc_matrix)
 
+    proj4string(routepaths) <- proj4string(locations)
+
     return(routepaths)
 
 }

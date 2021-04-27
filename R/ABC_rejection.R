@@ -55,27 +55,25 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
     snow::stopCluster(cl)
 
     processed_params <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation)
-    param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = 0 , tol = 1)
-    processed_abc <- process_abc(parameters = param_reject, lines = lines)
+    # param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = 0 , tol = 1)
+    # processed_abc <- process_abc(parameters = param_reject, lines = lines)
 
     if (output == "matrix") {
-      processed_abc <- data.frame(processed_abc)
+      routes <- processed_params@data
     } else if (output == "routes") {
-      routepaths@data <- data.frame(processed_abc)
-      colnames(routepaths@data) <- colnames(processed_abc)
-      processed_abc <- routepaths
+      routes <- processed_params
     }
 
-    processed_abc$result <- "Accept"
+    routes$result <- "Accept"
 
     if (!is.null(tol)) {
-      processed_abc$result[processed_abc$stats >= tol] <- "Reject"
+      routes$result[routes$stats >= tol] <- "Reject"
     }
 
     if (drop) {
-      processed_abc <- processed_abc[processed_abc$result == "Accept",]
+      routes <- routes[routes$result == "Accept",]
       }
 
-    return(processed_abc)
+    return(routes)
 
 }

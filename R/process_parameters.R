@@ -28,11 +28,16 @@ process_parameters <- function(routepaths, lines, priors, validation) {
 
   }
 
-  parameters <- priors[rep(seq_len(nrow(priors)), rep(length(lines), nrow(priors))), 1:ncol(priors)]
+  parameters <- cbind(priors[rep(seq_len(nrow(priors)), rep(length(lines), nrow(priors))), 1:ncol(priors)])
+  colnames(parameters) <- colnames(priors)
   parameters <- cbind(line_id = rep(1:length(lines), times = nrow(priors)), param = parameters, stats = summarystats)
 
-  parameters <- split.data.frame(parameters, parameters[,"line_id"])
+  routes <- routepaths
 
-  return(parameters)
+  routes@data <- data.frame(parameters)
+
+  # parameters <- split.data.frame(parameters, parameters[,"line_id"])
+
+  return(routes)
 
 }

@@ -10,7 +10,7 @@
 #'
 #' @export
 
-extract_priors <- function(routepaths) {
+extract_parameters <- function(routepaths) {
 
   if (!inherits(routepaths, c("sf", "data.frame"))) {
     stop("routepaths argument is invalid. Expecting a sf or data.frame object")
@@ -23,8 +23,8 @@ extract_priors <- function(routepaths) {
   start <- which(names(routepaths) == "row_no") + 1
   end <- which(names(routepaths) == "stats") - 1
 
-  priors <- routepaths[,start:end]
+  parameters <- routepaths[,start:end]
 
-  return(priors)
+  return(parameters)
 
 }

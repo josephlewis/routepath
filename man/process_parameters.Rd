@@ -4,16 +4,25 @@
 \alias{process_parameters}
 \title{Process prior parameter values}
 \usage{
-process_parameters(routepaths, lines, priors, validation)
+process_parameters(
+  routepaths,
+  known_routes,
+  priors,
+  summary_stat,
+  output = output,
+  row_no = row_no
+)
 }
 \arguments{
 \item{routepaths}{simulated route paths}
 
-\item{lines}{SpatialLines}
+\item{known_routes}{Spatialknown_routes}
 
 \item{priors}{prior parameter values}
 
-\item{validation}{Method to compare simulated route paths against lines}
+\item{output}{Method to compare simulated route paths against known_routes}
+
+\item{validation}{Method to compare simulated route paths against known_routes}
 }
 \value{
 list of prior parameter values

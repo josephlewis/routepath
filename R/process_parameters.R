@@ -2,11 +2,13 @@
 #'
 #' @param routepaths simulated route paths
 #'
-#' @param lines SpatialLines
+#' @param known_routes Spatialknown_routes
 #'
 #' @param priors prior parameter values
 #'
-#' @param validation Method to compare simulated route paths against lines
+#' @param validation Method to compare simulated route paths against known_routes
+#'
+#' @param output Method to compare simulated route paths against known_routes
 #'
 #' @return list of prior parameter values
 #'
@@ -18,26 +20,18 @@
 #' @import sp
 #' @import methods
 
-process_parameters <- function(routepaths, lines, priors, validation) {
+process_parameters <- function(routepaths, known_routes, priors, summary_stat, output = output, row_no = row_no) {
 
-  points_matrix <- matrix(c(1:length(routepaths), rep(1:length(lines), times = nrow(priors))), ncol = 2)
+    parameters <- data.frame(line_id = 1:nrow(known_routes),
+                             param_row = row_no,
+                             priors[rep(seq_len(nrow(priors)), each = nrow(known_routes)),, drop = FALSE],
+                        stats = summary_stat)
 
-  if(validation == "max_distance") {
+    if (output == "spatial") {
+        routepaths <- sf::st_as_sf(routepaths)
+        parameters <- cbind(routepaths, parameters)
+    }
 
-    summarystats <- max_distance(routepaths, lines, points_matrix)
-
-  }
-
-  parameters <- cbind(priors[rep(seq_len(nrow(priors)), rep(length(lines), nrow(priors))), 1:ncol(priors)])
-  colnames(parameters) <- colnames(priors)
-  parameters <- cbind(line_id = rep(1:length(lines), times = nrow(priors)), param = parameters, stats = summarystats)
-
-  routes <- routepaths
-
-  routes@data <- data.frame(parameters)
-
-  # parameters <- split.data.frame(parameters, parameters[,"line_id"])
-
-  return(routes)
+    return(parameters)
 
 }

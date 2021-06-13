@@ -1,10 +1,10 @@
-#' Extract Start and End Points from Lines
+#' Extract Start and End Points from known_routes
 #'
-#' This function extracts the start and end points from the supplied lines.
+#' This function extracts the start and end points from the supplied known_routes.
 #'
-#' @param lines sp SpatialLines
+#' @param known_routes sp Spatialknown_routes
 #'
-#' @return sp points of Start and End of supplied lines
+#' @return sp points of Start and End of supplied known_routes
 #'
 #' @keywords internal
 #'
@@ -14,14 +14,13 @@
 #' @import sp
 #' @import methods
 
-extract_end_points <- function(lines) {
+extract_end_points <- function(known_routes) {
 
-  end_points <- foreach::foreach(line_no = 1:length(lines), .combine = rbind) %do% {
-    sp::SpatialPoints(sp::coordinates(methods::as(lines[line_no, ], "SpatialPoints"))[c(1, nrow(sp::coordinates(methods::as(lines[line_no, ], "SpatialPoints")))), ])
+    end_points <- foreach::foreach(line_no = 1:length(known_routes), .combine = rbind) %do% {
+        sp::SpatialPoints(sp::coordinates(methods::as(known_routes[line_no, ], "SpatialPoints"))[c(1, nrow(sp::coordinates(methods::as(known_routes[line_no, ],
+            "SpatialPoints")))), ])
 
-  }
+    }
 
-  proj4string(end_points) <- proj4string(lines)
-
-  return(end_points)
+    return(end_points)
 }

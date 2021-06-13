@@ -14,14 +14,16 @@
 #'
 #' @import foreach
 #' @import leastcostpath
+#' @import sp
 
 calculate_routepaths <- function(cost_surface, locations) {
 
-    loc_matrix <- base::matrix(c(from = base::seq(from = 1, to = base::length(locations), by = 2), to = base::seq(from = 2, to = base::length(locations), by = 2)), ncol = 2)
+    loc_matrix <- base::matrix(c(from = base::seq(from = 1, to = base::length(locations), by = 2), to = base::seq(from = 2, to = base::length(locations),
+        by = 2)), ncol = 2)
 
     routepaths <- leastcostpath::create_lcp_network(cost_surface = cost_surface, locations = locations, nb_matrix = loc_matrix)
 
-    proj4string(routepaths) <- proj4string(locations)
+    routepaths <- as(routepaths, "SpatialLines")
 
     return(routepaths)
 

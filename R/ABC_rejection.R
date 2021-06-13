@@ -10,20 +10,19 @@
 #'
 #' @param model an R function implementing the route model to be simulated.
 #'
-#' @param lines a SpatialLines to be used when comparing against the simulated route paths
+#' @param known_routes a Spatialknown_routes to be used when comparing against the simulated route paths
 #'
-#' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'
-#'
+#' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean'
 #'
 #' @param tol tolerance. If NULL returns all simulations
 #'
 #' @param cores xx
 #'
-#' @param output if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.
+#' @param output if 'matrix' (default) then a matrix of parameter values of the accepted simulations is returned. If 'routes' then all accepted simulated routes are returned with the parameter values attached as dataframe.
 #'
-#' @param drop if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.
+#' @param drop_rows if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.
 #'
-#' @return Matrix or SpatialLinesDataFrame dependent on output argument
+#' @return Matrix or Spatialknown_routesDataFrame dependent on output argument
 #'
 #' @author Joseph Lewis
 #'
@@ -32,10 +31,11 @@
 #' @import foreach
 #' @import abc
 #' @import utils
+#' @import sf
 #'
 #' @export
 
-ABC_rejection <- function(input_data, model, priors, lines, validation = "max_distance", tol = NULL, cores = 1, output = "matrix", drop = FALSE) {
+ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", tol = NULL, cores = 1, output = "dataframe", drop_rows = FALSE) {
 
     cl <- snow::makeCluster(cores, type = "SOCK")
     doSNOW::registerDoSNOW(cl)
@@ -43,37 +43,30 @@ ABC_rejection <- function(input_data, model, priors, lines, validation = "max_di
     progress <- function(n) utils::setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
 
-    routepaths <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind", .packages = 'routepath', .options.snow = opts) %dopar% {
+    routepaths <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind", .packages = "routepath", .options.snow = opts) %dopar% {
 
-      cost_surface <- model(input_data, priors[row_no,])
-      points <- extract_end_points(lines = lines)
-      routes <- calculate_routepaths(cost_surface = cost_surface, locations = points)
+        cost_surface <- model(input_data, priors[row_no,])
+        points <- extract_end_points(known_routes = known_routes)
+        routes <- calculate_routepaths(cost_surface = cost_surface, locations = points)
+        summary_stat <- calculate_distance(routes = routes, known_routes = known_routes, validation = validation)
+        processed_params <- process_parameters(routepaths = routes, known_routes = known_routes, priors = priors[row_no,, drop = FALSE], summary_stat = summary_stat, output = output, row_no = row_no)
 
     }
 
     close(pb)
     snow::stopCluster(cl)
 
-    processed_params <- process_parameters(routepaths = routepaths, lines = lines, priors = priors, validation = validation)
-    # param_reject <- abc_reject(parameters = processed_params, lines = lines, summary_stat_target = 0 , tol = 1)
-    # processed_abc <- process_abc(parameters = param_reject, lines = lines)
-
-    if (output == "matrix") {
-      routes <- processed_params@data
-    } else if (output == "routes") {
-      routes <- processed_params
-    }
-
-    routes$result <- "Accept"
+    # routepaths$row_no <- rep(1:nrow(priors), each = nrow(known_routes))
+    routepaths$result <- "Accept"
 
     if (!is.null(tol)) {
-      routes$result[routes$stats >= tol] <- "Reject"
+        routepaths$result[routepaths$stats >= tol] <- "Reject"
     }
 
-    if (drop) {
-      routes <- routes[routes$result == "Accept",]
-      }
+    if (drop_rows) {
+        routepaths <- routepaths[routepaths$result == "Accept", ]
+    }
 
-    return(routes)
+    return(routepaths)
 
 }

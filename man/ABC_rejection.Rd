@@ -8,12 +8,12 @@ ABC_rejection(
   input_data,
   model,
   priors,
-  lines,
-  validation = "max_distance",
+  known_routes,
+  validation = "euclidean",
   tol = NULL,
   cores = 1,
-  output = "matrix",
-  drop = FALSE
+  output = "dataframe",
+  drop_rows = FALSE
 )
 }
 \arguments{
@@ -23,20 +23,20 @@ ABC_rejection(
 
 \item{priors}{a matrix of priors.}
 
-\item{lines}{a SpatialLines to be used when comparing against the simulated route paths}
+\item{known_routes}{a Spatialknown_routes to be used when comparing against the simulated route paths}
 
-\item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'max_distance'}
+\item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean'}
 
 \item{tol}{tolerance. If NULL returns all simulations}
 
 \item{cores}{xx}
 
-\item{output}{if "matrix" (default) then a matrix of parameter values of the accepted simulations is returned. If "routes" then all accepted simulated routes are returned with the parameter values attached as dataframe.}
+\item{output}{if 'matrix' (default) then a matrix of parameter values of the accepted simulations is returned. If 'routes' then all accepted simulated routes are returned with the parameter values attached as dataframe.}
 
-\item{drop}{if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.}
+\item{drop_rows}{if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.}
 }
 \value{
-Matrix or SpatialLinesDataFrame dependent on output argument
+Matrix or Spatialknown_routesDataFrame dependent on output argument
 }
 \description{
 This function launches a series of model simulations with model parameters drawn from the user-supplied prior values.

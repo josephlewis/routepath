@@ -16,7 +16,7 @@ calculate_distance <- function(routes, known_route, validation) {
 
     if (validation == "euclidean") {
 
-        distances <- euclidean_distance(routes, known_routes)
+        distances <- euclidean_distance(routes, known_route)
 
     }
 

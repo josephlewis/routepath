@@ -6,26 +6,28 @@
 \usage{
 process_parameters(
   routepaths,
-  known_routes,
   priors,
+  line_id,
+  row_no = row_no,
   summary_stat,
-  output = output,
-  row_no = row_no
+  spatial = spatial
 )
 }
 \arguments{
 \item{routepaths}{simulated route paths}
 
-\item{known_routes}{Spatialknown_routes}
+\item{priors}{a matrix or dataframe of priors}
 
-\item{priors}{prior parameter values}
+\item{line_id}{ID attached to output. Default value is 1. Useful if iteratively modelling routes and want to incrementally assign line IDs.}
 
-\item{output}{Method to compare simulated route paths against known_routes}
+\item{row_no}{Row number}
 
-\item{validation}{Method to compare simulated route paths against known_routes}
+\item{summary_stat}{Summary Statistic of distance from known route to simulated route}
+
+\item{spatial}{if TRUE then sf Lines returned. If FALSE then dataframe returned}
 }
 \value{
-list of prior parameter values
+routepaths. If Spatial TRUE then sf. If Spatial FALSE then dataframe
 }
 \description{
 Process prior parameter values

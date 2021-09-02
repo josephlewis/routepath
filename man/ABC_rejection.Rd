@@ -2,41 +2,44 @@
 % Please edit documentation in R/ABC_rejection.R
 \name{ABC_rejection}
 \alias{ABC_rejection}
-\title{Route Paths Rejection sampling scheme for ABC}
+\title{Route Paths Rejection sampling scheme for Approximate Bayesian Computation}
 \usage{
 ABC_rejection(
   input_data,
   model,
   priors,
-  known_routes,
+  known_route,
   validation = "euclidean",
   tol = NULL,
   cores = 1,
-  output = "dataframe",
-  drop_rows = FALSE
+  spatial = FALSE,
+  drop_rows = FALSE,
+  line_id = 1
 )
 }
 \arguments{
 \item{input_data}{a list of input data to be used in the route modelling process}
 
-\item{model}{an R function implementing the route model to be simulated.}
+\item{model}{An R function implementing the route model to be simulated.}
 
-\item{priors}{a matrix of priors.}
+\item{priors}{a matrix or dataframe of priors}
 
-\item{known_routes}{a Spatialknown_routes to be used when comparing against the simulated route paths}
+\item{known_route}{a SpatialLines object of the known route to be used when comparing against the simulated route paths}
 
 \item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean'}
 
-\item{tol}{tolerance. If NULL returns all simulations}
+\item{tol}{tolerance. Maximum deviation from known route for the simulation to be accepted. If NULL all simulated route paths are returned.}
 
-\item{cores}{xx}
+\item{cores}{Number of cores}
 
-\item{output}{if 'matrix' (default) then a matrix of parameter values of the accepted simulations is returned. If 'routes' then all accepted simulated routes are returned with the parameter values attached as dataframe.}
+\item{spatial}{if TRUE then sf Lines returned. If FALSE then dataframe returned}
 
-\item{drop_rows}{if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations retained.}
+\item{drop_rows}{if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations returned}
+
+\item{line_id}{ID attached to output. Default value is 1. Useful if iteratively modelling routes and want to incrementally assign line IDs}
 }
 \value{
-Matrix or Spatialknown_routesDataFrame dependent on output argument
+Dataframe or sf Lines
 }
 \description{
 This function launches a series of model simulations with model parameters drawn from the user-supplied prior values.

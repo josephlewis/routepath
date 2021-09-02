@@ -7,9 +7,9 @@
 calculate_routepaths(cost_surface, locations)
 }
 \arguments{
-\item{cost_surface}{TransitionMatrix}
+\item{cost_surface}{Cost Surface denoting ease of traversing landscape}
 
-\item{locations}{Start and End SpatialPoints returned from extract_end_points()}
+\item{locations}{Start and End SpatialPoints}
 }
 \value{
 SpatialLines of route paths from start to end locations

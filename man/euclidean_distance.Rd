@@ -2,20 +2,20 @@
 % Please edit documentation in R/euclidean_distance.R
 \name{euclidean_distance}
 \alias{euclidean_distance}
-\title{Calculates route path from start and end locations of known_routes using user-supplied cost surface}
+\title{Calculate euclidean distance from simulated route path to known route}
 \usage{
-euclidean_distance(routes, known_routes)
+euclidean_distance(routes, known_route)
 }
 \arguments{
-\item{cost_surface}{TransitionMatrix}
+\item{known_route}{a SpatialLines object of the known route to be used when comparing against the simulated route paths}
 
-\item{locations}{Start and End SpatialPoints returned from extract_end_points()}
+\item{cost_surface}{Cost Surface denoting ease of traversing landscape}
 }
 \value{
-Spatialknown_routes of route paths from start to end locations
+Euclidean distance from simulated route path to known route
 }
 \description{
-This function calculates the route path from the start and end locations of known_routes using a user-supplied cost surface
+xxxx
 }
 \author{
 Joseph Lewis

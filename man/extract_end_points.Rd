@@ -2,18 +2,18 @@
 % Please edit documentation in R/extract_end_points.R
 \name{extract_end_points}
 \alias{extract_end_points}
-\title{Extract Start and End Points from known_routes}
+\title{Extract Start and End Points from known_route}
 \usage{
-extract_end_points(known_routes)
+extract_end_points(known_route)
 }
 \arguments{
-\item{known_routes}{sp Spatialknown_routes}
+\item{known_route}{sp Spatialknown_route}
 }
 \value{
-sp points of Start and End of supplied known_routes
+sp points of Start and End of supplied known_route
 }
 \description{
-This function extracts the start and end points from the supplied known_routes.
+This function extracts the start and end points from the supplied known_route.
 }
 \author{
 Joseph Lewis

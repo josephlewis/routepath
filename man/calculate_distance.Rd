@@ -4,19 +4,17 @@
 \alias{calculate_distance}
 \title{Process prior parameter values}
 \usage{
-calculate_distance(routes, known_routes, validation)
+calculate_distance(routes, known_route, validation)
 }
 \arguments{
-\item{known_routes}{Spatialknown_routes}
+\item{routes}{simulated route paths}
+
+\item{known_route}{a SpatialLines object of the known route to be used when comparing against the simulated route paths}
 
 \item{validation}{Method to compare simulated route paths against known_routes}
-
-\item{routepaths}{simulated route paths}
-
-\item{matrix}{matrix}
 }
 \value{
-summary statistic
+Summary Statistic of distance from known route to simulated route
 }
 \description{
 Process prior parameter values

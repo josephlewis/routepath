@@ -20,7 +20,7 @@ extract_parameters <- function(routepaths) {
     routepaths <- sf::st_drop_geometry(routepaths)
   }
 
-  start <- which(names(routepaths) == "row_no") + 1
+  start <- which(names(routepaths) == "param_row") + 1
   end <- which(names(routepaths) == "stats") - 1
 
   parameters <- routepaths[,start:end]

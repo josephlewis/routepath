@@ -1,30 +1,27 @@
-#' Calculates route path from start and end locations of known_routes using user-supplied cost surface
+#' Calculate euclidean distance from simulated route path to known route
 #'
-#' This function calculates the route path from the start and end locations of known_routes using a user-supplied cost surface
+#' xxxx
 #'
-#' @param cost_surface TransitionMatrix
+#' @param cost_surface Cost Surface denoting ease of traversing landscape
 #'
-#' @param locations Start and End SpatialPoints returned from extract_end_points()
+#' @param known_route a SpatialLines object of the known route to be used when comparing against the simulated route paths
 #'
-#' @return Spatialknown_routes of route paths from start to end locations
+#' @return Euclidean distance from simulated route path to known route
 #'
 #' @keywords internal
 #'
 #' @author Joseph Lewis
 #'
-#' @import foreach
-#' @import leastcostpath
+#' @import rgeos
+#' @import sp
+#' @import methods
 
-euclidean_distance <- function(routes, known_routes) {
+euclidean_distance <- function(routes, known_route) {
 
-    distances <- foreach(row_no = 1:nrow(known_routes), .combine = "c") %do% {
+  line_pts <- as(routes, "SpatialPoints")
 
-      line_pts <- as(routes[row_no, ], "SpatialPoints")
+  distance <- max(base::suppressWarnings(rgeos::gDistance(spgeom1 = line_pts, spgeom2 = known_route, byid = TRUE)))
 
-      max_dist <- max(base::suppressWarnings(rgeos::gDistance(spgeom1 = line_pts, spgeom2 = known_routes[row_no, ], byid = TRUE)))
-
-    }
-
-    return(distances)
+  return(distance)
 
 }

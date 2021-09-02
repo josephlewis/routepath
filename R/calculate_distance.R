@@ -1,20 +1,18 @@
 #' Process prior parameter values
 #'
-#' @param routepaths simulated route paths
+#' @param routes simulated route paths
 #'
-#' @param known_routes Spatialknown_routes
-#'
-#' @param matrix matrix
+#' @param known_route a SpatialLines object of the known route to be used when comparing against the simulated route paths
 #'
 #' @param validation Method to compare simulated route paths against known_routes
 #'
-#' @return summary statistic
+#' @return Summary Statistic of distance from known route to simulated route
 #'
 #' @keywords internal
 #'
 #' @author Joseph Lewis
 
-calculate_distance <- function(routes, known_routes, validation) {
+calculate_distance <- function(routes, known_route, validation) {
 
     if (validation == "euclidean") {
 

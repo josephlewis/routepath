@@ -1,26 +1,23 @@
-#' Extract Start and End Points from known_routes
+#' Extract Start and End Points from known_route
 #'
-#' This function extracts the start and end points from the supplied known_routes.
+#' This function extracts the start and end points from the supplied known_route.
 #'
-#' @param known_routes sp Spatialknown_routes
+#' @param known_route sp Spatialknown_route
 #'
-#' @return sp points of Start and End of supplied known_routes
+#' @return sp points of Start and End of supplied known_route
 #'
 #' @keywords internal
 #'
 #' @author Joseph Lewis
 #'
-#' @import foreach
 #' @import sp
 #' @import methods
 
-extract_end_points <- function(known_routes) {
+extract_end_points <- function(known_route) {
 
-    end_points <- foreach::foreach(line_no = 1:length(known_routes), .combine = rbind) %do% {
-        sp::SpatialPoints(sp::coordinates(methods::as(known_routes[line_no, ], "SpatialPoints"))[c(1, nrow(sp::coordinates(methods::as(known_routes[line_no, ],
-            "SpatialPoints")))), ])
+  route_points <- as(known_route, "SpatialPoints")
 
-    }
+  end_points <- route_points[c(1,length(route_points)),]
 
-    return(end_points)
+  return(end_points)
 }

@@ -2,32 +2,32 @@
 #'
 #' @param routepaths simulated route paths
 #'
-#' @param known_routes Spatialknown_routes
+#' @param priors a matrix or dataframe of priors
 #'
-#' @param priors prior parameter values
+#' @param line_id ID attached to output. Default value is 1. Useful if iteratively modelling routes and want to incrementally assign line IDs.
 #'
-#' @param validation Method to compare simulated route paths against known_routes
+#' @param row_no Row number
 #'
-#' @param output Method to compare simulated route paths against known_routes
+#' @param summary_stat Summary Statistic of distance from known route to simulated route
 #'
-#' @return list of prior parameter values
+#' @param spatial if TRUE then sf Lines returned. If FALSE then dataframe returned
+#'
+#' @return routepaths. If Spatial TRUE then sf. If Spatial FALSE then dataframe
 #'
 #' @keywords internal
 #'
 #' @author Joseph Lewis
 #'
-#' @import foreach
-#' @import sp
-#' @import methods
+#' @import sf
 
-process_parameters <- function(routepaths, known_routes, priors, summary_stat, output = output, row_no = row_no) {
+process_parameters <- function(routepaths, priors, line_id, row_no = row_no, summary_stat, spatial = spatial) {
 
-    parameters <- data.frame(line_id = 1:nrow(known_routes),
+    parameters <- data.frame(line_id = line_id,
                              param_row = row_no,
-                             priors[rep(seq_len(nrow(priors)), each = nrow(known_routes)),, drop = FALSE],
-                        stats = summary_stat)
+                             priors = priors[row_no,, drop = FALSE],
+                             stats = summary_stat)
 
-    if (output == "spatial") {
+    if (spatial) {
         routepaths <- sf::st_as_sf(routepaths)
         parameters <- cbind(routepaths, parameters)
     }

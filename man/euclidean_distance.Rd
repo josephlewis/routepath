@@ -7,15 +7,15 @@
 euclidean_distance(routes, known_route)
 }
 \arguments{
-\item{known_route}{a SpatialLines object of the known route to be used when comparing against the simulated route paths}
+\item{routes}{a SpatialLines object of the simulated route}
 
-\item{cost_surface}{Cost Surface denoting ease of traversing landscape}
+\item{known_route}{a SpatialLines object of the known route to be used when comparing against the simulated route paths}
 }
 \value{
 Euclidean distance from simulated route path to known route
 }
 \description{
-xxxx
+Calculate euclidean distance from simulated route path to known route
 }
 \author{
 Joseph Lewis

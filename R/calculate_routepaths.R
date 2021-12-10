@@ -20,7 +20,7 @@ calculate_routepaths <- function(cost_surface, locations) {
 
     routepaths <- leastcostpath::create_lcp(cost_surface = cost_surface, origin = locations[1,], destination = locations[2,], directional = TRUE, cost_distance = FALSE)
 
-    routepaths <- as(routepaths, "SpatialLines")
+    # routepaths <- as(routepaths, "SpatialLines")
 
     return(routepaths)
 

@@ -1,8 +1,6 @@
 #' Calculate euclidean distance from simulated route path to known route
 #'
-#' xxxx
-#'
-#' @param cost_surface Cost Surface denoting ease of traversing landscape
+#' @param routes a SpatialLines object of the simulated route
 #'
 #' @param known_route a SpatialLines object of the known route to be used when comparing against the simulated route paths
 #'

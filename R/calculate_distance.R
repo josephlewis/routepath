@@ -20,6 +20,18 @@ calculate_distance <- function(routes, known_route, validation) {
 
     }
 
+  if (validation == "pdi") {
+
+    distances <- path_deviation_index(routes, known_route)
+
+  }
+
+  if (validation == "frechet") {
+
+    distances <- frechet_distance(routes, known_route)
+
+  }
+
     return(distances)
 
 }

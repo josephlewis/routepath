@@ -4,7 +4,7 @@
 #'
 #' @details xxx
 #'
-#' @param input_data a list of input data to be used in the route modelling process
+#' @param input_data a list of input data to be used in the route path modelling process
 #'
 #' @param priors a matrix or dataframe of priors
 #'
@@ -12,7 +12,7 @@
 #'
 #' @param known_route a SpatialLines object of the known route to be used when comparing against the simulated route paths
 #'
-#' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean'
+#' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean', 'pdi' and 'frechet'
 #'
 #' @param tol tolerance. Maximum deviation from known route for the simulation to be accepted. If NULL all simulated route paths are returned.
 #'

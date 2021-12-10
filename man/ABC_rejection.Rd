@@ -18,7 +18,7 @@ ABC_rejection(
 )
 }
 \arguments{
-\item{input_data}{a list of input data to be used in the route modelling process}
+\item{input_data}{a list of input data to be used in the route path modelling process}
 
 \item{model}{An R function implementing the route model to be simulated.}
 
@@ -26,7 +26,7 @@ ABC_rejection(
 
 \item{known_route}{a SpatialLines object of the known route to be used when comparing against the simulated route paths}
 
-\item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean'}
+\item{validation}{Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean', 'pdi' and 'frechet'}
 
 \item{tol}{tolerance. Maximum deviation from known route for the simulation to be accepted. If NULL all simulated route paths are returned.}
 

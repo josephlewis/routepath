@@ -1,6 +1,6 @@
 Package: routepath
 Title: Path Modelling
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person(given = "Joseph",
            family = "Lewis",

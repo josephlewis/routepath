@@ -19,7 +19,9 @@ frechet_distance <- function(routes, known_route) {
   routes_sf <- sf::st_as_sf(routes)
   known_route <- sf::st_as_sf(known_route)
 
-  distance <- as.numeric(st_distance(routes_sf, known_route, which = "Frechet"))
+  sf::st_crs(routes_sf) <- sf::st_crs(known_route)
+
+  distance <- as.numeric(sf::st_distance(routes_sf, known_route, which = "Frechet"))
 
   return(distance)
 

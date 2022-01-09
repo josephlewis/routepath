@@ -32,6 +32,12 @@ calculate_distance <- function(routes, known_route, validation) {
 
   }
 
+  if (validation == "hausdorff") {
+
+    distances <- hausdorff_distance(routes, known_route)
+
+  }
+
     return(distances)
 
 }

@@ -1,3 +1,6 @@
+# 0.1.2 (09th January 2022)
+* Added Hausdorff distance for measuring deviation between simulated route and known route 
+
 # 0.1.1 (14th December 2021)
 * Fixed frechet_distance error by assigning known_route crs to simulated route
 

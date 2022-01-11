@@ -13,7 +13,10 @@
 #' @return Local Weighted Linear Combination
 #'
 #' @author Joseph Lewis
-
+#'
+#' @import Matrix
+#'
+#' @export
 local_wlc <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
 
   local_cs <- rescale_cs_local(cost_surface = cost_surface, p = p, constrains = constrains, win = win)

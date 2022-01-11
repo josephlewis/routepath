@@ -9,6 +9,10 @@
 #' @return cost suface standardised to a maximum value of 1 and minimum value relative to 0
 #'
 #' @author Joseph Lewis
+#'
+#' @import gdistance
+#'
+#' @export
 
 rescale_cs_global <- function(cost_surface, p = 1, constrains = NULL) {
 
@@ -24,7 +28,7 @@ rescale_cs_global <- function(cost_surface, p = 1, constrains = NULL) {
 
   cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)
 
-  max_val <- max(cost_surface@transitionMatrix@x)
+  max_val <- base::max(cost_surface@transitionMatrix@x)
 
   cost_surface@transitionMatrix@x <- (((c(0, cost_surface@transitionMatrix@x) - 0) / (max_val - 0)) ^ p)[-1]
 

@@ -13,6 +13,11 @@
 #' @return cost suface standardised to a maximum value of 1 and minimum value relative to 0 incorporating local range
 #'
 #' @author Joseph Lewis
+#'
+#' @import gdistance
+#' @import raster
+#'
+#' @export
 
 local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
 

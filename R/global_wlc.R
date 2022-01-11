@@ -11,6 +11,10 @@
 #' @return Global Weighted Linear Combination
 #'
 #' @author Joseph Lewis
+#'
+#' @import gdistance
+#'
+#' @export
 
 global_wlc <- function(cost_surface, p = 1, constrains = NULL, global_weight) {
 

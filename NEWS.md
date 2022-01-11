@@ -1,3 +1,9 @@
+# 0.1.3 (11th January 2022)
+* Implemented Local and Global Weighted Linear Combination
+  - rescale_cs_global
+  - rescale_cs_local
+  - local_weights_cs
+
 # 0.1.2 (09th January 2022)
 * Added Hausdorff distance for measuring deviation between simulated route and known route 
 

@@ -1,0 +1,44 @@
+#' Rescales cost surface based on local range of transition values
+#'
+#' @param cost_surface cost surface
+#'
+#' @param p risk
+#'
+#' @param constrains Boolean vector of adjacent cells not traversable
+#'
+#' @param win Window
+#'
+#' @return cost suface standardised to a maximum value of 1 and minimum value relative to 0 incorporating local range
+#'
+#' @author Joseph Lewis
+
+rescale_cs_local <- function(cost_surface, p = 1, constrains = NULL, win) {
+
+  if (p < 1) {stop("p must be equal or greater than 1")}
+
+  rast <- raster(cost_surface)
+  adj_rast <- raster::adjacent(rast, cells=1:ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
+  cs_adj <- gdistance::adjacencyFromTransition(cost_surface)
+
+  if (!is.null(constrains)) {
+    adj_rast2 <- rbind(adj_rast, cs_adj[constrains,])
+    adj_rast3 <- adj_rast2[!(duplicated(adj_rast2) | duplicated(adj_rast2, fromLast = TRUE)), ]
+  }
+
+  rast_vals <- rast[adj_rast[,2]]
+  rast_vals_mat <-  cbind(adj_rast, rast_vals)
+
+  local_values <- stats::aggregate(rast_vals ~ from, data = rast_vals_mat, FUN = function(x) { (((c(0, x) - 0) / (max(x) - 0)) ^ p)[-1]})
+  local_values <- unlist(local_values$rast_vals)
+  local_values <- local_values[which(rast_vals_mat[,1] == rast_vals_mat[,2])]
+
+  cost_surface@transitionMatrix@x <- rep(local_values, times = diff(cost_surface@transitionMatrix@p))
+
+  if (!is.null(constrains)) {
+    cost_surface[cs_adj][constrains] <- 0
+    cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)
+  }
+
+  return(cost_surface)
+
+}

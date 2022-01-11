@@ -23,19 +23,19 @@
 #' @export
 
 create_route <- function(input_data, model, values, origin, destination) {
-  
+
   ## check if nrow of values not one
   ## check if values is a matrix
-  
+
   cost_surface <- model(input_data, values)
-  
+
   points <- rbind(origin, destination)
-  
+
   route <- calculate_routepaths(cost_surface = cost_surface, locations = points)
-  
+
   route <- sf::st_as_sf(route)
   route <- cbind(route, values)
-  
+
   return(route)
-  
+
 }

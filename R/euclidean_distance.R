@@ -18,7 +18,7 @@ euclidean_distance <- function(routes, known_route) {
 
   line_pts <- as(routes, "SpatialPoints")
 
-  distance <- max(base::suppressWarnings(rgeos::gDistance(spgeom1 = line_pts, spgeom2 = known_route, byid = TRUE)))
+  distance <- base::max(base::suppressWarnings(rgeos::gDistance(spgeom1 = line_pts, spgeom2 = known_route, byid = TRUE)))
 
   return(distance)
 

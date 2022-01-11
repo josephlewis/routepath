@@ -12,9 +12,6 @@
 #'
 #' @author Joseph Lewis
 #'
-#' @import gdistance
-#' @import raster
-#'
 #' @export
 
 rescale_cs_local <- function(cost_surface, p = 1, constrains = NULL, win) {
@@ -22,11 +19,11 @@ rescale_cs_local <- function(cost_surface, p = 1, constrains = NULL, win) {
   if (p < 1) {stop("p must be equal or greater than 1")}
 
   rast <- raster::raster(cost_surface)
-  adj_rast <- raster::adjacent(rast, cells=1:ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
+  adj_rast <- raster::adjacent(rast, cells=1:raster::ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
   cs_adj <- gdistance::adjacencyFromTransition(cost_surface)
 
   if (!is.null(constrains)) {
-    adj_rast2 <- rbind(adj_rast, cs_adj[constrains,])
+    adj_rast2 <- base::rbind(adj_rast, cs_adj[constrains,])
     adj_rast3 <- adj_rast2[!(duplicated(adj_rast2) | duplicated(adj_rast2, fromLast = TRUE)), ]
   }
 

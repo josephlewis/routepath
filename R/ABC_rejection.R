@@ -31,7 +31,6 @@
 #' @import snow
 #' @import doSNOW
 #' @import foreach
-#' @import abc
 #' @import utils
 #' @import sf
 #'

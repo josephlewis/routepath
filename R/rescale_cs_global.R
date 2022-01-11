@@ -10,8 +10,6 @@
 #'
 #' @author Joseph Lewis
 #'
-#' @import gdistance
-#'
 #' @export
 
 rescale_cs_global <- function(cost_surface, p = 1, constrains = NULL) {

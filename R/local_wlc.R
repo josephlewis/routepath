@@ -14,8 +14,6 @@
 #'
 #' @author Joseph Lewis
 #'
-#' @import Matrix
-#'
 #' @export
 local_wlc <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
 

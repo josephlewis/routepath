@@ -14,9 +14,6 @@
 #'
 #' @author Joseph Lewis
 #'
-#' @import gdistance
-#' @import raster
-#'
 #' @export
 
 local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
@@ -25,26 +22,26 @@ local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global
   gw <- global_weight
 
   if (!is.null(constrains)) {
-    gr <- max(cost_surface[cs_adj][!constrains]) - min(cost_surface[cs_adj][!constrains])
+    gr <- base::max(cost_surface[cs_adj][!constrains]) - base::min(cost_surface[cs_adj][!constrains])
   } else {
-    gr <- max(cost_surface[cs_adj]) - min(cost_surface[cs_adj])
+    gr <- base::max(cost_surface[cs_adj]) - base::min(cost_surface[cs_adj])
   }
 
-  rast <- raster(cost_surface)
-  adj_rast <- raster::adjacent(rast, cells=1:ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
+  rast <- raster::raster(cost_surface)
+  adj_rast <- raster::adjacent(rast, cells=1:raster::ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
 
   if (!is.null(constrains)) {
-    adj_rast2 <- rbind(adj_rast, cs_adj[constrains,])
-    adj_rast3 <- adj_rast2[!(duplicated(adj_rast2) | duplicated(adj_rast2, fromLast = TRUE)), ]
+    adj_rast2 <- base::rbind(adj_rast, cs_adj[constrains,])
+    adj_rast3 <- adj_rast2[!(base::duplicated(adj_rast2) | base::duplicated(adj_rast2, fromLast = TRUE)), ]
   }
 
   rast_vals <- rast[adj_rast[,2]]
-  rast_vals_mat <-  cbind(adj_rast, rast_vals)
+  rast_vals_mat <-  base::cbind(adj_rast, rast_vals)
 
   local_weights <- stats::aggregate(rast_vals ~ from, data = rast_vals_mat, FUN = function(x) { ((gw*(max(x) - min(x))) / (gr))})
-  local_weights <- unlist(local_weights$rast_vals)
+  local_weights <- base::unlist(local_weights$rast_vals)
 
-  cost_surface@transitionMatrix@x <- rep(local_weights, times = diff(cost_surface@transitionMatrix@p))
+  cost_surface@transitionMatrix@x <- base::rep(local_weights, times = diff(cost_surface@transitionMatrix@p))
 
   if (!is.null(constrains)) {
     cost_surface[cs_adj][constrains] <- 0

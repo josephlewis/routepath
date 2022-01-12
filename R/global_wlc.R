@@ -18,7 +18,9 @@ global_wlc <- function(cost_surface, p = 1, constrains = NULL, global_weight) {
 
   if (p < 1) {stop("p must be equal or greater than 1")}
 
-  if (global_weight > 0 & global_weight <= 1) {stop("global weight must be greater than 0 and less than or equal to 1")}
+  if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+
+  if(global_weight > 1 | global_weight <= 0) {stop("global weight must be greater than 0 and less than or equal to 1")}
 
   # remove explicit zeroes from the sparse matrix. Ensures scaling is not impacted by zero values
   cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)

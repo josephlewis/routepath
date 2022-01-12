@@ -18,6 +18,14 @@
 
 local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
 
+  if (p < 1) {stop("p must be equal or greater than 1")}
+
+  if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+
+  if(!inherits(win, "matrix")) {stop("win must be a matrix. See raster::adjacent for details on neighourbood matrix")}
+
+  if(global_weight > 1 | global_weight <= 0) {stop("global weight must be greater than 0 and less than or equal to 1")}
+
   cs_adj <- gdistance::adjacencyFromTransition(cost_surface)
   gw <- global_weight
 

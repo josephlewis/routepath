@@ -18,6 +18,10 @@ rescale_cs_local <- function(cost_surface, p = 1, constrains = NULL, win) {
 
   if (p < 1) {stop("p must be equal or greater than 1")}
 
+  if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+
+  if(!inherits(win, "matrix")) {stop("win must be a matrix. See raster::adjacent for details on neighourbood matrix")}
+
   rast <- raster::raster(cost_surface)
   adj_rast <- raster::adjacent(rast, cells=1:raster::ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
   cs_adj <- gdistance::adjacencyFromTransition(cost_surface)

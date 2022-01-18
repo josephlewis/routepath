@@ -14,7 +14,7 @@
 
 rescale_cs_global <- function(cost_surface, p = 1, constrains = NULL) {
 
-  if (p < 1) {stop("p must be equal or greater than 1")}
+  if (p <= 1) {stop("p must be equal or greater than 1")}
 
   cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)
 

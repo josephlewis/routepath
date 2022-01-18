@@ -18,9 +18,9 @@
 
 local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
 
-  if (p < 1) {stop("p must be equal or greater than 1")}
+  if (p <= 1) {stop("p must be equal or greater than 1")}
 
-  if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+  # if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
 
   if(!inherits(win, "matrix")) {stop("win must be a matrix. See raster::adjacent for details on neighourbood matrix")}
 
@@ -40,14 +40,16 @@ local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global
 
   if (!is.null(constrains)) {
     adj_rast2 <- base::rbind(adj_rast, cs_adj[constrains,])
-    adj_rast3 <- adj_rast2[!(base::duplicated(adj_rast2) | base::duplicated(adj_rast2, fromLast = TRUE)), ]
+    adj_rast <- adj_rast2[!(base::duplicated(adj_rast2) | base::duplicated(adj_rast2, fromLast = TRUE)), ]
   }
 
   rast_vals <- rast[adj_rast[,2]]
   rast_vals_mat <-  base::cbind(adj_rast, rast_vals)
 
-  local_weights <- stats::aggregate(rast_vals ~ from, data = rast_vals_mat, FUN = function(x) { ((gw*(max(x) - min(x))) / (gr))})
-  local_weights <- base::unlist(local_weights$rast_vals)
+  local_weights <- as.numeric(tapply(rast_vals_mat[,3],rast_vals_mat[,1], function(x) { ((gw*(max(x) - min(x))) / (gr))}))
+
+  #local_weights <- stats::aggregate(rast_vals ~ from, data = rast_vals_mat, FUN = function(x) { ((gw*(max(x) - min(x))) / (gr))})
+  #local_weights <- base::unlist(local_weights)
 
   cost_surface@transitionMatrix@x <- base::rep(local_weights, times = diff(cost_surface@transitionMatrix@p))
 

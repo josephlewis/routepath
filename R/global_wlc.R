@@ -16,9 +16,9 @@
 
 global_wlc <- function(cost_surface, p = 1, constrains = NULL, global_weight) {
 
-  if (p < 1) {stop("p must be equal or greater than 1")}
+  if (p <= 1) {stop("p must be equal or greater than 1")}
 
-  if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+  # if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
 
   if(global_weight > 1 | global_weight <= 0) {stop("global weight must be greater than 0 and less than or equal to 1")}
 

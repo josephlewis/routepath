@@ -16,9 +16,9 @@
 
 rescale_cs_local <- function(cost_surface, p = 1, constrains = NULL, win) {
 
-  if (p < 1) {stop("p must be equal or greater than 1")}
+  if (p <= 1) {stop("p must be equal or greater than 1")}
 
-  if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+  # if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
 
   if(!inherits(win, "matrix")) {stop("win must be a matrix. See raster::adjacent for details on neighourbood matrix")}
 
@@ -34,8 +34,8 @@ rescale_cs_local <- function(cost_surface, p = 1, constrains = NULL, win) {
   rast_vals <- rast[adj_rast[,2]]
   rast_vals_mat <-  base::cbind(adj_rast, rast_vals)
 
-  local_values <- stats::aggregate(rast_vals ~ from, data = rast_vals_mat, FUN = function(x) { (((c(0, x) - 0) / (max(x) - 0)) ^ p)[-1]})
-  local_values <- base::unlist(local_values$rast_vals)
+  local_values <- tapply(rast_vals_mat[,3],rast_vals_mat[,1], function(x) { (((c(0, x) - 0) / (max(x) - 0)) ^ 1)[-1]})
+  local_values <- base::unlist(local_values)
   local_values <- local_values[which(rast_vals_mat[,1] == rast_vals_mat[,2])]
 
   cost_surface@transitionMatrix@x <- base::rep(local_values, times = diff(cost_surface@transitionMatrix@p))

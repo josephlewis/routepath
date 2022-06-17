@@ -21,7 +21,7 @@ create_route(input_data, model, values, origin, destination)
 sf line
 }
 \description{
-This function creates a route using predefined parameter values.
+This function creates a route using predefined parameter values
 }
 \details{
 xxx

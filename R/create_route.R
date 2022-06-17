@@ -1,6 +1,6 @@
 #' Create a route using predefined parameter values
 #'
-#' This function creates a route using predefined parameter values.
+#' This function creates a route using predefined parameter values
 #'
 #' @details xxx
 #'

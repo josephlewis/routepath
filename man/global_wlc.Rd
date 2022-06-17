@@ -4,16 +4,24 @@
 \alias{global_wlc}
 \title{Global Weighted Linear Combination}
 \usage{
-global_wlc(cost_surface, p = 1, constrains = NULL, global_weight)
+global_wlc(
+  cost_surface,
+  constrains = NULL,
+  global_weight,
+  neighbours,
+  fun = NULL
+)
 }
 \arguments{
 \item{cost_surface}{cost surface}
 
-\item{p}{risk}
-
 \item{constrains}{Boolean vector of adjacent cells not traversable}
 
 \item{global_weight}{Importance of factor}
+
+\item{neighbours}{xxx}
+
+\item{fun}{An R function to apply to the standardised transition values}
 }
 \value{
 Global Weighted Linear Combination

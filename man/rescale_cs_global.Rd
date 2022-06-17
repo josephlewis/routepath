@@ -4,14 +4,16 @@
 \alias{rescale_cs_global}
 \title{Rescales cost surface based on global range of transition values}
 \usage{
-rescale_cs_global(cost_surface, p = 1, constrains = NULL)
+rescale_cs_global(cost_surface, constrains = NULL, neighbours, fun = NULL)
 }
 \arguments{
 \item{cost_surface}{cost surface}
 
-\item{p}{risk}
+\item{constrains}{Logical vector of adjacent cells not traversable}
 
-\item{constrains}{Boolean vector of adjacent cells not traversable}
+\item{neighbours}{xxx}
+
+\item{fun}{An R function to apply to the standardised transition values}
 }
 \value{
 cost suface standardised to a maximum value of 1 and minimum value relative to 0

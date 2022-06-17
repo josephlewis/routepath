@@ -1,28 +1,28 @@
-#' Route Paths Rejection sampling scheme for Approximate Bayesian Computation
+#' Routepath Rejection sampling scheme using Approximate Bayesian Computation
 #'
-#' This function launches a series of model simulations with model parameters drawn from the user-supplied prior values.
+#' This function launches a series of model simulations using user-supplied prior parameter values
 #'
 #' @details xxx
 #'
-#' @param input_data a list of input data to be used in the route path modelling process
+#' @param input_data a list of input data to be used in the routepath modelling process
 #'
-#' @param priors a matrix or dataframe of priors
+#' @param priors a matrix of priors
 #'
-#' @param model An R function implementing the route model to be simulated.
+#' @param model An R function implementing the route model to be simulated. This function is expected to return a TransitionLayer object
 #'
-#' @param known_route a SpatialLines object of the known route to be used when comparing against the simulated route paths
+#' @param known_route a SpatialLines object of the known route to compare against the simulated routepaths
 #'
-#' @param validation Method used to validate simulated routes against supplied line. Current implementations are: 'euclidean', 'pdi' and 'frechet'
+#' @param validation Distance method used to validate simulated routes against the supplied known route. Current implementations are: 'euclidean', 'pdi', 'frechet' and 'hausdorff'
 #'
-#' @param tol tolerance. Maximum deviation from known route for the simulation to be accepted. If NULL all simulated route paths are returned.
+#' @param tol Tolerance threshold. Maximum deviation from known route for the simulated routepaths to be accepted. If NULL all simulated routepaths are returned.
 #'
 #' @param cores Number of cores
 #'
 #' @param spatial if TRUE then sf Lines returned. If FALSE then dataframe returned
 #'
-#' @param drop_rows if TRUE (default) then rejected simulations are dropped. If FALSE then all simulations returned
+#' @param drop_rows if FALSE (default) all simulated routepaths returned. If TRUE rejected simulations are dropped
 #'
-#' @param line_id ID attached to output. Default value is 1. Useful if iteratively modelling routes and want to incrementally assign line IDs
+#' @param line_id ID attached to routepaths output. Default value is 1. Useful if iteratively modelling known routes and want to incrementally assign line IDs
 #'
 #' @return Dataframe or sf Lines
 #'

@@ -7,7 +7,7 @@
 #' @return routepaths
 #'
 #' @author Joseph Lewis
-#'
+
 change_tolerance <- function(routepaths, tolerance) {
 
   routepaths$result <- "Accept"

@@ -17,7 +17,7 @@ calculate_distance <- function(routes, known_route, validation) {
   route_coord_nrow <- nrow(routes@lines[[1]]@Lines[[1]]@coords)
 
   if (route_coord_nrow == 1) {
-    distances <- NULL
+    distances <- NA
   } else if (validation == "euclidean") {
     distances <- euclidean_distance(routes, known_route)
   } else if (validation == "pdi") {

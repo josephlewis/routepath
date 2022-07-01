@@ -18,12 +18,7 @@
 
 calculate_routepaths <- function(cost_surface, locations) {
 
-    routepaths <- leastcostpath::create_lcp(cost_surface = cost_surface, origin = locations[1,], destination = locations[2,], directional = TRUE, cost_distance = FALSE))
-
-    if(inherits(routepaths, "try-error")) {
-      routepaths <- SpatialLinesDataFrame(sl = SpatialLines(list(Lines(Line(matrix(0, ncol = 2)), ID = 1))), data = data.frame("direction" = "A to B"), match.ID = FALSE)
-      raster::crs(routepaths) <- raster::crs(cost_surface)
-    }
+    routepaths <- leastcostpath::create_lcp(cost_surface = cost_surface, origin = locations[1,], destination = locations[2,], directional = TRUE, cost_distance = FALSE)
 
     return(routepaths)
 

@@ -24,9 +24,6 @@
 
 create_route <- function(input_data, model, values, origin, destination) {
 
-  ## check if nrow of values not one
-  ## check if values is a matrix
-
   cost_surface <- model(input_data, values)
 
   points <- rbind(origin, destination)

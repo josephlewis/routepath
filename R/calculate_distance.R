@@ -14,30 +14,18 @@
 
 calculate_distance <- function(routes, known_route, validation) {
 
-    if (validation == "euclidean") {
+  route_coord_nrow <- nrow(routes@lines[[1]]@Lines[[1]]@coords)
 
-        distances <- euclidean_distance(routes, known_route)
-
-    }
-
-  if (validation == "pdi") {
-
+  if (route_coord_nrow == 1) {
+    distances <- NA
+  } else if (validation == "euclidean") {
+    distances <- euclidean_distance(routes, known_route)
+  } else if (validation == "pdi") {
     distances <- path_deviation_index(routes, known_route)
-
-  }
-
-  if (validation == "frechet") {
-
+  } else if (validation == "frechet") {
     distances <- frechet_distance(routes, known_route)
-
-  }
-
-  if (validation == "hausdorff") {
-
+  } else if (validation == "hausdorff") {
     distances <- hausdorff_distance(routes, known_route)
-
   }
-
     return(distances)
-
 }

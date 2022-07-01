@@ -2,11 +2,9 @@
 #'
 #' @param cost_surface cost surface
 #'
-#' @param p risk
-#'
 #' @param constrains Boolean vector of adjacent cells not traversable
 #'
-#' @param win Window
+#' @param neighbours xxxxx
 #'
 #' @param global_weight Importance of factor
 #'
@@ -16,17 +14,14 @@
 #'
 #' @export
 
-local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global_weight) {
+local_weights_cs <- function(cost_surface, constrains = NULL, global_weight, neighbours) {
 
-  if (p <= 1) {stop("p must be equal or greater than 1")}
+  cs_rast <- suppressWarnings(raster::raster(cost_surface))
 
-  # if(!inherits(constrains, "logical")) {stop("constraints must be a logical vector")}
+  # calculate adjacent with centre cell included (this is done so that the local value can be assigned later on to the centre cell)
+  rast_adj <- raster::adjacent(cs_rast, cells=1:raster::ncell(cs_rast), pairs=TRUE, directions=neighbours, include = TRUE, sorted = TRUE)
+  cs_adj <- raster::adjacent(cs_rast, cells=1:raster::ncell(cs_rast), pairs=TRUE, directions=neighbours, include = FALSE, sorted = TRUE)
 
-  if(!inherits(win, "matrix")) {stop("win must be a matrix. See raster::adjacent for details on neighourbood matrix")}
-
-  if(global_weight > 1 | global_weight <= 0) {stop("global weight must be greater than 0 and less than or equal to 1")}
-
-  cs_adj <- gdistance::adjacencyFromTransition(cost_surface)
   gw <- global_weight
 
   if (!is.null(constrains)) {
@@ -35,16 +30,13 @@ local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global
     gr <- base::max(cost_surface[cs_adj]) - base::min(cost_surface[cs_adj])
   }
 
-  rast <- raster::raster(cost_surface)
-  adj_rast <- raster::adjacent(rast, cells=1:raster::ncell(rast), pairs=TRUE, directions=win, include = TRUE, sorted = TRUE)
-
-  if (!is.null(constrains)) {
-    adj_rast2 <- base::rbind(adj_rast, cs_adj[constrains,])
-    adj_rast <- adj_rast2[!(base::duplicated(adj_rast2) | base::duplicated(adj_rast2, fromLast = TRUE)), ]
+  if(inherits(constrains, "logical"))  {
+    rast_adj <- base::rbind(rast_adj, cs_adj[constrains,])
+    rast_adj <- rast_adj[!(base::duplicated(rast_adj) | base::duplicated(rast_adj, fromLast = TRUE)), ]
   }
 
-  rast_vals <- rast[adj_rast[,2]]
-  rast_vals_mat <-  base::cbind(adj_rast, rast_vals)
+  rast_vals <- cs_rast[rast_adj[,2]]
+  rast_vals_mat <-  base::cbind(rast_adj, rast_vals)
 
   local_weights <- as.numeric(tapply(rast_vals_mat[,3],rast_vals_mat[,1], function(x) { ((gw*(max(x) - min(x))) / (gr))}))
 
@@ -53,7 +45,7 @@ local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global
 
   cost_surface@transitionMatrix@x <- base::rep(local_weights, times = diff(cost_surface@transitionMatrix@p))
 
-  if (!is.null(constrains)) {
+  if(inherits(constrains, "logical"))  {
     cost_surface[cs_adj][constrains] <- 0
     cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)
   }
@@ -61,3 +53,4 @@ local_weights_cs <- function(cost_surface, p = 1, constrains = NULL, win, global
   return(cost_surface)
 
 }
+

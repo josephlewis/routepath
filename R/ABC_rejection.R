@@ -58,8 +58,6 @@ ABC_rejection <- function(input_data, model, priors, known_route, validation = "
     close(pb)
     snow::stopCluster(cl)
 
-    routepaths$result <- "Accept"
-
     if (!is.null(tol)) {
         routepaths$result[routepaths$stats >= tol] <- "Reject"
     }

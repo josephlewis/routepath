@@ -24,8 +24,9 @@ process_parameters <- function(routepaths, priors, line_id, row_no = row_no, sum
 
     parameters <- data.frame(line_id = line_id,
                              param_row = row_no,
-                             priors = priors[row_no,, drop = FALSE],
-                             stats = summary_stat)
+                             p = priors[row_no,, drop = FALSE],
+                             stats = summary_stat,
+                             result = "Accept")
 
     if (spatial) {
         routepaths <- sf::st_as_sf(routepaths)

@@ -22,13 +22,10 @@ Imports:
     Matrix,
     iterators,
     methods,
-    ggplot2,
-    gridExtra,
-    dplyr,
-    ggdendro,
     sf,
     rgeos,
     sp,
     leastcostpath,
     raster,
-    gdistance
+    gdistance,
+    HDInterval

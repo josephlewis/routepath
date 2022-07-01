@@ -4,16 +4,16 @@
 \alias{rescale_cs_local}
 \title{Rescales cost surface based on local range of transition values}
 \usage{
-rescale_cs_local(cost_surface, p = 1, constrains = NULL, win)
+rescale_cs_local(cost_surface, constrains = NULL, neighbours, fun = NULL)
 }
 \arguments{
 \item{cost_surface}{cost surface}
 
-\item{p}{risk}
-
 \item{constrains}{Boolean vector of adjacent cells not traversable}
 
-\item{win}{Window}
+\item{neighbours}{xxxxx}
+
+\item{fun}{xxxx}
 }
 \value{
 cost suface standardised to a maximum value of 1 and minimum value relative to 0 incorporating local range

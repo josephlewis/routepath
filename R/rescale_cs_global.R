@@ -18,10 +18,9 @@ rescale_cs_global <- function(cost_surface, constrains = NULL, neighbours, fun =
 
   cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)
 
-  rast_cs <- suppressWarnings(raster::raster(cost_surface))
+  cs_rast <- suppressWarnings(raster::raster(cost_surface))
 
-  cs_adj <- raster::adjacent(rast_cs, cells = 1:raster::ncell(rast_cs),
-                             pairs = TRUE, directions = neighbours)
+  cs_adj <- raster::adjacent(cs_rast, cells = 1:raster::ncell(cs_rast), pairs = TRUE, directions = neighbours)
 
   if(inherits(constrains, "logical"))  {
     cost_surface[cs_adj][constrains] <- 0

@@ -2,20 +2,22 @@
 % Please edit documentation in R/change_tolerance.R
 \name{change_tolerance}
 \alias{change_tolerance}
-\title{Change tolerance of accepted simulated routepaths}
+\title{Change tolerance of accepted simulated routes}
 \usage{
-change_tolerance(routepaths, tolerance)
+change_tolerance(routes, tolerance, type = "absolute")
 }
 \arguments{
-\item{routepaths}{simulated routepaths}
+\item{routes}{simulated routes}
 
-\item{tolerance}{Maximum tolerance value for routepaths to be accepted}
+\item{tolerance}{Maximum tolerance value for routes to be accepted}
+
+\item{type}{absolute or percentage}
 }
 \value{
-routepaths
+routes
 }
 \description{
-Change tolerance of accepted simulated routepaths
+Change tolerance of accepted simulated routes
 }
 \author{
 Joseph Lewis

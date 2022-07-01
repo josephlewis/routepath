@@ -4,18 +4,24 @@
 \alias{local_wlc}
 \title{Local Weighted Linear Combination}
 \usage{
-local_wlc(cost_surface, p = 1, constrains = NULL, win, global_weight)
+local_wlc(
+  cost_surface,
+  constrains = NULL,
+  global_weight,
+  neighbours,
+  fun = NULL
+)
 }
 \arguments{
 \item{cost_surface}{cost surface}
 
-\item{p}{risk}
-
 \item{constrains}{Boolean vector of adjacent cells not traversable}
 
-\item{win}{Window}
-
 \item{global_weight}{Importance of factor}
+
+\item{neighbours}{xxx}
+
+\item{fun}{xxx}
 }
 \value{
 Local Weighted Linear Combination

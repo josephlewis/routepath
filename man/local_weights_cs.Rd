@@ -4,18 +4,16 @@
 \alias{local_weights_cs}
 \title{Local Weight}
 \usage{
-local_weights_cs(cost_surface, p = 1, constrains = NULL, win, global_weight)
+local_weights_cs(cost_surface, constrains = NULL, global_weight, neighbours)
 }
 \arguments{
 \item{cost_surface}{cost surface}
 
-\item{p}{risk}
-
 \item{constrains}{Boolean vector of adjacent cells not traversable}
 
-\item{win}{Window}
-
 \item{global_weight}{Importance of factor}
+
+\item{neighbours}{xxxxx}
 }
 \value{
 cost suface standardised to a maximum value of 1 and minimum value relative to 0 incorporating local range

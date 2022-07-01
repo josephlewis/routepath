@@ -27,8 +27,6 @@ global_wlc <- function(cost_surface, constrains = NULL, global_weight, neighbour
   # multiply by user-supplied criterion global weight
   cost_surface <- cost_surface * global_weight
 
-  cost_surface@transitionMatrix <- Matrix::drop0(cost_surface@transitionMatrix)
-
   return(cost_surface)
 
 }

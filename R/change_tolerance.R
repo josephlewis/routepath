@@ -20,10 +20,11 @@ change_tolerance <- function(routes, tolerance, type = "absolute") {
     stop("invalid type argument. Expecting 'absolute' or 'percentage")
   }
 
-  routes$result <- "Accept"
+  routes$result[!is.na(routes$stats)] <- "Accept"
+  routes$result[is.na(routes$stats)] <- "Reject"
 
   if(type == "absolute") {
-    routes$result[routes$stats > tolerance] <- "Reject"
+    routes$result[routes$stats > tolerance & !is.na(routes$stats)] <- "Reject"
   }
 
   if(type == "percentage") {
@@ -31,7 +32,8 @@ change_tolerance <- function(routes, tolerance, type = "absolute") {
       stop("tolerance must be less than 100 percent when type is 'percentage'")
     }
 
-  routes_ordered <- routes[order(routes$line_id, routes$stats, decreasing = FALSE),]
+  routes_not_na <- routes[!is.na(routes$stats),]
+  routes_ordered <- routes_not_na[order(routes_not_na$line_id, routes_not_na$stats, decreasing = FALSE),]
   routes_rejected <- routes_ordered[ave(routes_ordered$stats, routes_ordered$line_id, FUN = seq_along) > sum(routes$line_id == 1) * (tolerance/100),]
 
   routes[as.numeric(rownames(routes_rejected)),]$result <- "Reject"

@@ -28,12 +28,6 @@
 #'
 #' @author Joseph Lewis
 #'
-#' @import snow
-#' @import doSNOW
-#' @import foreach
-#' @import utils
-#' @import sf
-#'
 #' @export
 
 ABC_rejection <- function(input_data, model, priors, known_route, validation = "euclidean", tol = NULL, cores = 1, spatial = FALSE, drop_rows = FALSE, line_id = 1) {

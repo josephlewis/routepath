@@ -10,7 +10,7 @@ summarise_parameters <- function(routepaths, col_index, fun) {
   params <- list()
 
   for(i in 1:length(col_index)) {
-    summarised_param <- aggregate(accepted_routepaths[[col_index[i]]], list(accepted_routepaths$line_id), func_vector[i])
+    summarised_param <- stats::aggregate(accepted_routepaths[[col_index[i]]], list(accepted_routepaths$line_id), func_vector[i])
     summarised_param <- summarised_param[,2, drop = FALSE]
     colnames(summarised_param) <- colnames(accepted_routepaths)[col_index[i]]
     params[[i]] <- summarised_param

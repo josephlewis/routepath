@@ -34,7 +34,7 @@ change_tolerance <- function(routes, tolerance, type = "absolute") {
 
   routes_not_na <- routes[!is.na(routes$stats),]
   routes_ordered <- routes_not_na[order(routes_not_na$line_id, routes_not_na$stats, decreasing = FALSE),]
-  routes_rejected <- routes_ordered[ave(routes_ordered$stats, routes_ordered$line_id, FUN = seq_along) > sum(routes$line_id == 1) * (tolerance/100),]
+  routes_rejected <- routes_ordered[stats::ave(routes_ordered$stats, routes_ordered$line_id, FUN = seq_along) > sum(routes$line_id == 1) * (tolerance/100),]
 
   routes[as.numeric(rownames(routes_rejected)),]$result <- "Reject"
 

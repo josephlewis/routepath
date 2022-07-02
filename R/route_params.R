@@ -39,40 +39,40 @@ route_params <- function(routes, col_index = NULL, filename = NULL, xlab_names =
     x_labs <- cols
   }
 
-  par(mfrow = c(ceiling(length(cols)/ceiling(length(cols)/5)), ceiling(length(cols)/5)))
+  graphics::par(mfrow = c(ceiling(length(cols)/ceiling(length(cols)/5)), ceiling(length(cols)/5)))
 
   for(i in 1:length(cols)) {
 
     param_values <- routes[[cols[i]]]
 
-    param_mean <- aggregate(param_values, list(routes$line_id),  mean)
+    param_mean <- stats::aggregate(param_values, list(routes$line_id),  mean)
     param_mean <- cbind(param_mean, cols[i])
     colnames(param_mean) <- c("line_id", "mean", "param")
 
-    param_low <- aggregate(param_values, list(routes$line_id), min)[,2]
-    param_high <- aggregate(param_values, list(routes$line_id), max)[,2]
+    param_low <- stats::aggregate(param_values, list(routes$line_id), min)[,2]
+    param_high <- stats::aggregate(param_values, list(routes$line_id), max)[,2]
 
-    hdi_param_low <- aggregate(param_values, list(routes$line_id),  HDInterval::hdi)[,2][,1]
-    hdi_param_high <- aggregate(param_values, list(routes$line_id),  HDInterval::hdi)[,2][,2]
+    hdi_param_low <- stats::aggregate(param_values, list(routes$line_id),  HDInterval::hdi)[,2][,1]
+    hdi_param_high <- stats::aggregate(param_values, list(routes$line_id),  HDInterval::hdi)[,2][,2]
 
-    plot(param_mean$line_id, param_mean$mean, xlab = "Route", ylab = x_labs[i], pch = 16, xaxt="n", panel.first= c(abline(v = seq(1, max(as.numeric(routes$line_id)), by = 1), col="cornsilk2", lty = 2), grid(NA, NULL, col="cornsilk2", lty = 2)), ylim = c(min(param_values), max(param_values)), xlim = c(1, max(routes$line_id)))
-    title(LETTERS[i], adj = 0)
+    plot(param_mean$line_id, param_mean$mean, xlab = "Route", ylab = x_labs[i], pch = 16, xaxt="n", panel.first= c(graphics::abline(v = seq(1, max(as.numeric(routes$line_id)), by = 1), col="cornsilk2", lty = 2), graphics::grid(NA, NULL, col="cornsilk2", lty = 2)), ylim = c(min(param_values), max(param_values)), xlim = c(1, max(routes$line_id)))
+    graphics::title(LETTERS[i], adj = 0)
 
     for (j in 1:length(unique(routes$line_id))) {
-      lines(cbind(sort(unique(routes$line_id))[j], sort(unique(routes$line_id))[j]), cbind(param_low[j], param_high[j]))
-      lines(cbind(sort(unique(routes$line_id))[j], sort(unique(routes$line_id))[j]), cbind(hdi_param_low[j], hdi_param_high[j]), lwd = 2)
+      graphics::lines(cbind(sort(unique(routes$line_id))[j], sort(unique(routes$line_id))[j]), cbind(param_low[j], param_high[j]))
+      graphics::lines(cbind(sort(unique(routes$line_id))[j], sort(unique(routes$line_id))[j]), cbind(hdi_param_low[j], hdi_param_high[j]), lwd = 2)
     }
 
-    points(param_mean$line_id, param_low)
-    points(param_mean$line_id, param_high)
-    abline(h = mean(param_values), lty = 2)
+    graphics::points(param_mean$line_id, param_low)
+    graphics::points(param_mean$line_id, param_high)
+    graphics::abline(h = mean(param_values), lty = 2)
 
-    axis(1, at = 1:max(routes$line_id), las=2)
+    graphics::axis(1, at = 1:max(routes$line_id), las=2)
 
   }
 
   if(is.character(filename))  {
-    invisible(capture.output(suppressWarnings(dev.print(png, paste0(filename, "_Route_Parameters", ".png"), units = "in", res = 300, ...))))
-    invisible(capture.output(dev.off()))
+    invisible(utils::capture.output(suppressWarnings(grDevices::dev.print(grDevices::png, paste0(filename, "_Route_Parameters", ".png"), units = "in", res = 300, ...))))
+    invisible(utils::capture.output(grDevices::dev.off()))
   }
 }

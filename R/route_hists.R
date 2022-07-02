@@ -37,13 +37,13 @@ route_hists <- function(routes, col_index = NULL, xlab_names = NULL, ...) {
     x_labs <- cols
   }
 
-  par(mfrow = c(ceiling(length(cols)/ceiling(length(cols)/5)), ceiling(length(cols)/5)))
+  graphics::par(mfrow = c(ceiling(length(cols)/ceiling(length(cols)/5)), ceiling(length(cols)/5)))
 
   for(i in 1:length(cols)) {
 
     param_values <- routes[[cols[i]]]
-    hist(param_values, xlab = "Parameter Value", main = NULL, ...)
-    title(main = x_labs[i], adj = 0)
+    graphics::hist(param_values, xlab = "Parameter Value", main = NULL, ...)
+    graphics::title(main = x_labs[i], adj = 0)
   }
 
 }

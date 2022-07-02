@@ -28,6 +28,8 @@ process_parameters <- function(routepaths, priors, line_id, row_no = row_no, sum
                              stats = summary_stat,
                              result = "Accept")
 
+    parameters$result[is.na(parameters$stats)] <- "Reject"
+
     if (spatial) {
         routepaths <- sf::st_as_sf(routepaths)
         parameters <- cbind(routepaths, parameters)

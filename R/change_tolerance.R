@@ -9,6 +9,8 @@
 #' @return routes
 #'
 #' @author Joseph Lewis
+#'
+#' @export
 
 change_tolerance <- function(routes, tolerance, type = "absolute") {
 

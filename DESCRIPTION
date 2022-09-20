@@ -1,35 +1,20 @@
 Package: routepath
-Title: Path Modelling
-Version: 0.1.4
+Title: Explaining past known routes
+Version: 1.0.0
+Date: 2022-09-20
 Authors@R: 
     person(given = "Joseph",
            family = "Lewis",
            role = c("aut", "cre"),
            email = "josephlewis1992@gmail.com",
            comment = c(ORCID = "0000-0002-0477-1756"))
-Description: routepath is designed to infer parameters influencing a route.
+Description: routepath is designed for inferring parameters influencing a known past route.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 URL: https://github.com/josephlewis/routepath
 BugReports: https://github.com/josephlewis/routepath/issues
-Imports: 
-    snow,
-    doSNOW,
-    foreach,
-    Matrix,
-    iterators,
-    methods,
-    utils,
-    stats,
-    graphics,
-    grDevices,
-    sf,
-    rgeos,
-    sp,
-    leastcostpath,
-    raster,
-    gdistance,
-    HDInterval
+Depends: R (>= 3.4.0)
+Imports: terra (>= 1.5-34), sf (>= 1.0-7), leastcostpath (>= 2.0.0), foreach (>= 1.5.2), parallel, doParallel, ggplot2, Matrix (>= 1.4-1)

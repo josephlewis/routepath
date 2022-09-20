@@ -1,31 +1,33 @@
-#' Process prior parameter values
+#' calculates distance between simulated route and known route
 #'
-#' @param routes simulated route paths
+#' Calculates distance between simulated route and known route using the validation method chosen
 #'
-#' @param known_route a SpatialLines object of the known route to be used when comparing against the simulated route paths
+#' @param route \code{sf line} least-cost path
 #'
-#' @param validation Method to compare simulated route paths against known_routes
+#' @param known_route \code{sf line} known route
 #'
-#' @return Summary Statistic of distance from known route to simulated route
+#' @param validation \code{character} validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
+#'
+#' @return distance betwen simulated route and known route
 #'
 #' @keywords internal
 #'
 #' @author Joseph Lewis
+#'
 
-calculate_distance <- function(routes, known_route, validation) {
+calculate_distance <- function(route, known_route, validation) {
 
-  route_coord_nrow <- nrow(routes@lines[[1]]@Lines[[1]]@coords)
-
-  if (route_coord_nrow == 1) {
-    distances <- NA
-  } else if (validation == "euclidean") {
-    distances <- euclidean_distance(routes, known_route)
+  if (validation == "euclidean") {
+    distance <- euclidean_distance(route, known_route)
   } else if (validation == "pdi") {
-    distances <- path_deviation_index(routes, known_route)
+    distance <- pdi_distance(route, known_route)
   } else if (validation == "frechet") {
-    distances <- frechet_distance(routes, known_route)
+    distance <- frechet_distance(route, known_route)
   } else if (validation == "hausdorff") {
-    distances <- hausdorff_distance(routes, known_route)
+    distance <- hausdorff_distance(route, known_route)
+  } else {
+    stop("Validation method not implemented. Implemented methods include: 'euclidean', 'pdi', 'frechet', 'hausdorff'")
   }
-    return(distances)
+
+  return(distance)
 }

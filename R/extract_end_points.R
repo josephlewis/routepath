@@ -1,23 +1,21 @@
 #' Extract Start and End Points from known_route
 #'
-#' This function extracts the start and end points from the supplied known_route.
+#' Extracts the origin and destination point from the supplied known route.
 #'
-#' @param known_route sp Spatialknown_route
+#' @param known_route \code{sf line} known route
 #'
-#' @return sp points of Start and End of supplied known_route
+#' @return sf POINT start and end of supplied known_route
 #'
 #' @keywords internal
 #'
 #' @author Joseph Lewis
 #'
-#' @import sp
-#' @import methods
 
 extract_end_points <- function(known_route) {
 
-  route_points <- as(known_route, "SpatialPoints")
+  route_pts <- sf::st_cast(known_route, "POINT", warn = FALSE)
+  end_pts <- route_pts[c(1,nrow(route_pts)),]
 
-  end_points <- route_points[c(1,length(route_points)),]
-
-  return(end_points)
+  return(end_pts)
 }
+

@@ -7,13 +7,13 @@
 extract_end_points(known_route)
 }
 \arguments{
-\item{known_route}{sp Spatialknown_route}
+\item{known_route}{\code{sf line} known route}
 }
 \value{
-sp points of Start and End of supplied known_route
+sf POINT start and end of supplied known_route
 }
 \description{
-This function extracts the start and end points from the supplied known_route.
+Extracts the origin and destination point from the supplied known route.
 }
 \author{
 Joseph Lewis

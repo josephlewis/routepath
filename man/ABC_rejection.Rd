@@ -2,50 +2,79 @@
 % Please edit documentation in R/ABC_rejection.R
 \name{ABC_rejection}
 \alias{ABC_rejection}
-\title{Routepath Rejection sampling scheme using Approximate Bayesian Computation}
+\title{routepath rejection sampling scheme using Approximate Bayesian Computation}
 \usage{
 ABC_rejection(
   input_data,
   model,
   priors,
   known_route,
+  line_id = 1,
   validation = "euclidean",
   tol = NULL,
-  cores = 1,
-  spatial = FALSE,
-  drop_rows = FALSE,
-  line_id = 1
+  ncores = 1,
+  spatial = FALSE
 )
 }
 \arguments{
-\item{input_data}{a list of input data to be used in the routepath modelling process}
+\item{input_data}{\code{list} Data used in the routepath ABC process}
 
-\item{model}{An R function implementing the route model to be simulated. This function is expected to return a TransitionLayer object}
+\item{model}{\code{function} route model to be used when simulating routes. This function requires that a \code{conductanceMatrix} is returned}
 
-\item{priors}{a matrix of priors}
+\item{priors}{\code{Matrix} prior parameter values}
 
-\item{known_route}{a SpatialLines object of the known route to compare against the simulated routepaths}
+\item{known_route}{\code{sf line} known route to compare against the simulated routepaths}
 
-\item{validation}{Distance method used to validate simulated routes against the supplied known route. Current implementations are: 'euclidean', 'pdi', 'frechet' and 'hausdorff'}
+\item{line_id}{\code{numeric} value to be included within routepath object. Default value is 1. This can be useful if iteratively modelling known routes and incrementally assigning line ids is required}
 
-\item{tol}{Tolerance threshold. Maximum deviation from known route for the simulated routepaths to be accepted. If NULL all simulated routepaths are returned.}
+\item{validation}{\code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
 
-\item{cores}{Number of cores}
+\item{tol}{\code{numeric} maximum distance between simulated routes and known route to be deemed equal. All simulated routes above this value are rejected}
 
-\item{spatial}{if TRUE then sf Lines returned. If FALSE then dataframe returned}
+\item{ncores}{\code{numeric} number of cores used during the routepath ABC process. Default number of cores is 1}
 
-\item{drop_rows}{if FALSE (default) all simulated routepaths returned. If TRUE rejected simulations are dropped}
-
-\item{line_id}{ID attached to routepaths output. Default value is 1. Useful if iteratively modelling known routes and want to incrementally assign line IDs}
+\item{spatial}{\code{logical} if TRUE then sf object returned. if FALSE (default) then data.frame object returned}
 }
 \value{
-Dataframe or sf Lines
+\code{routepath}
 }
 \description{
-This function launches a series of model simulations using user-supplied prior parameter values
+Launches a series of model simulations using user-supplied prior parameter values. See details for more information
 }
 \details{
 xxx
+}
+\examples{
+
+library(leastcostpath)
+
+r <- terra::rast(system.file("extdata/SICILY_1000m.tif", package="leastcostpath"))
+slope_cs <- create_slope_cs(x = r, cost_function = "tobler", neighbours = 4)
+locs <- sf::st_sf(geometry = sf::st_sfc(
+sf::st_point(c(839769, 4199443)),
+sf::st_point(c(1038608, 4100024)),
+crs = terra::crs(r)))
+
+known_route <- leastcostpath::create_lcp(x = slope_cs, origin = locs[1,],
+destination = locs[2,], cost_distance = FALSE)
+
+input_data <- list(r)
+
+nsims <- 10
+priors <- cbind(a = 1, b = rnorm(n = nsims, mean = 3.5, sd = 1),
+c = rnorm(n = nsims, mean = 0.05, sd = 0.1))
+
+model <- function(x, y) {
+slope_cs <- leastcostpath::create_slope_cs(x = x[[1]],
+cost_function = function(x) {(y[1] * exp(-y[2] * abs(x + y[3]))) / 3.6},
+neighbours = 4)
+
+return(slope_cs)
+}
+
+routepath <- ABC_rejection(input_data = input_data, model = model,
+priors = priors, known_route = known_route,
+line_id = 1, validation = "euclidean", tol = NULL)
 }
 \author{
 Joseph Lewis

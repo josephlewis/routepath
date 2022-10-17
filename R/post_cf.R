@@ -22,17 +22,29 @@ post_cf <- function(routepaths, index, FUN, draws, type = "conductance", normali
 
   math_slope <- seq(-0.9, 0.9, 0.01)
 
-  post_vals <- apply(X = routepaths$routes$p[routepaths$routes$result == "Accept",index], MARGIN = 2, FUN = function(x) { sample(x, size = draws, replace = TRUE)})
+  routes <- sf::st_drop_geometry(routepaths$routes)
 
-  if(inherits(post_vals, "numeric")) {
-    post_vals <- matrix(post_vals, nrow = 1, ncol = length(post_vals))
+  param_cols <- which(grepl(pattern = "p.", colnames(routes), fixed = TRUE))
+  post_vals <- routes[routes$result == "Accept", param_cols]
+  param_vals <- post_vals[,index]
+
+  if(nrow(param_vals) == 0) {
+    stop("Unable to create a posterior cost function as no accepted simulations. Use update_tolerance() to modify tolerance required for simulation to be Accepted")
   }
+
+  if(nrow(param_vals) > 1) {
+    param_vals <- apply(X = param_vals, MARGIN = 2, FUN = function(x) { sample(x, size = draws, replace = TRUE)})
+  } else {
+    draws <- 1
+    }
+
+  colnames(param_vals) <- base::gsub(pattern = "p.", replacement = "", x = colnames(param_vals))
 
   cf_list <- list()
 
   for(i in 1:draws) {
 
-    val_list <- as.list(post_vals[i,])
+    val_list <- as.list(param_vals[i,])
     val_list$x <- math_slope
 
     cf_vals <- do.call(FUN, val_list)

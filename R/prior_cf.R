@@ -31,17 +31,19 @@ prior_cf <- function(priors, index, FUN, draws, type = "conductance", normalise 
 
   math_slope <- seq(-0.9, 0.9, 0.01)
 
-  prior_vals <- apply(X = priors[,index], MARGIN = 2, FUN = function(x) { sample(x, size = draws, replace = TRUE)})
+  param_vals <- priors[,index, drop = FALSE]
 
-  if(inherits(prior_vals, "numeric")) {
-    prior_vals <- matrix(prior_vals, nrow = 1, ncol = length(prior_vals))
+  if(nrow(param_vals) > 1) {
+    param_vals <- apply(X = param_vals, MARGIN = 2, FUN = function(x) { sample(x, size = draws, replace = TRUE)})
+  } else {
+    draws <- 1
   }
 
   cf_list <- list()
 
   for(i in 1:draws) {
 
-    val_list <- as.list(prior_vals[i,])
+    val_list <- as.list(param_vals[i,])
     val_list$x <- math_slope
 
     cf_vals <- do.call(FUN, val_list)

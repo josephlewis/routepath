@@ -98,17 +98,17 @@ ABC_rejection <- function(input_data, model, priors, known_route, line_id = 1, v
 print.routepath <- function(x, verbose = FALSE) {
   cat("Class:", class(x))
   if(verbose) {
-    cat("\nmodel:\n\n", deparse(body(x$model)[[2]]))
+    cat("\nmodel:\n\n", deparse(body(x$model)))
   }
   cat("\n")
   cat("\nvalidation method:", x$validation)
   cat("\ntolerance:", x$tolerance)
   cat("\nno. of routes:", length(unique(x$routes$line_id)))
-  cat("\ntotal no. of simulations:", nrow(x$routes$p))
+  cat("\ntotal no. of simulations:", nrow(x$routes))
   if(verbose) {
     cat("\ntotal no. of simulations per route:", stats::aggregate(x$routes$param_row, list(x$routes$line_id), max)[,2])
   }
-  cat("\ntotal no. of parameters:", ncol(x$routes$p))
+  cat("\ntotal no. of parameters:", sum(grepl(pattern = "p.", x = colnames(x$routes), fixed = TRUE)))
   cat("\npercentage of simulations accepted:", sum(x$routes$result == "Accept") / length(x$routes$result) * 100, "%")
   if(verbose) {
   cat("\npercentage of simulations accepted per route:", paste0((stats::aggregate(x$routes$result == "Accept", list(x$routes$line_id), sum)[,2]) / stats::aggregate(x$routes$param_row, list(x$routes$line_id), max)[,2] *100, "%"))

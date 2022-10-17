@@ -1,3 +1,6 @@
+# 0.1.5 (17th October 2022)
+* Amended calculate_distance to make sure route and known_route have same crs
+
 # 0.1.4 (17th June 2022)
 * Modified rescale_cs_global to allow for user-supplied transformations of transition values via the fun argument
 * Added fun argument to  global_wlc

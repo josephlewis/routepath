@@ -1,7 +1,7 @@
 Package: routepath
-Title: Explaining past known routes
-Version: 1.0.0
-Date: 2022-09-20
+Title: Explaining known past routes
+Version: 0.1.5
+Date: 2022-10-17
 Authors@R: 
     person(given = "Joseph",
            family = "Lewis",

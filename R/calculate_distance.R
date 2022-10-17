@@ -17,6 +17,8 @@
 
 calculate_distance <- function(route, known_route, validation) {
 
+  sf::st_crs(route) <- sf::st_crs(known_route)
+
   if (validation == "euclidean") {
     distance <- euclidean_distance(route, known_route)
   } else if (validation == "pdi") {

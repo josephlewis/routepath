@@ -22,3 +22,4 @@ rescale conductanceMatrix based on global range of values
 \author{
 Joseph Lewis
 }
+\keyword{internal}

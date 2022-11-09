@@ -23,7 +23,7 @@ ABC_rejection(
 
 \item{priors}{\code{Matrix} Prior parameter values}
 
-\item{known_routes}{\code{sf line} Known route to compare against the simulated routes}
+\item{known_routes}{\code{sf line} Known routes to compare against the simulated routes}
 
 \item{validation}{\code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
 

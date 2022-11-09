@@ -1,5 +1,7 @@
 # 0.1.6 (09th November 2022)
 * Redesigned routepath so that the same parameter values are used to model all routes supplied in the known_routes argument. This has multiple benefits including the ability to model routes hierarchically, as well as understanding whether a single parameter combination can explain all routes
+* Added prior_cf_check(), post_cf_check(), prior_route_check(), post_route_check(), and simulate_route()
+* Removed bind_routepaths as no longer needed
 
 # 0.1.5 (17th October 2022)
 * Amended calculate_distance to make sure route and known_route have same crs

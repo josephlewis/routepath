@@ -22,4 +22,3 @@ Updates the maximum distance between simulated routes and known route to be deem
 \author{
 Joseph Lewis
 }
-\keyword{internal}

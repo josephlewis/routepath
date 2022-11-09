@@ -8,6 +8,8 @@
 #'
 #' @return \code{conductanceMatrix} standardised conductanceMatrix with a maximum value of 1 and minimum value relative to 0
 #'
+#' @keywords internal
+#'
 #' @author Joseph Lewis
 #'
 #' @export

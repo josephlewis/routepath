@@ -10,8 +10,6 @@
 #'
 #' @return \code{routepath}
 #'
-#' @keywords internal
-#'
 #' @author Joseph Lewis
 #'
 

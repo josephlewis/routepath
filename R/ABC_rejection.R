@@ -10,7 +10,7 @@
 #'
 #' @param model \code{function} Model to be used when simulating routes. This function requires that a \code{conductanceMatrix} is returned
 #'
-#' @param known_routes \code{sf line} Known route to compare against the simulated routes
+#' @param known_routes \code{sf line} Known routes to compare against the simulated routes
 #'
 #' @param validation \code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
 #'
@@ -87,7 +87,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
       route <- calculate_routepath(x = conductanceMatrix, locations = points)
       distance <- calculate_distance(route = route, known_route = known_routes[route_no,], validation = validation)
 
-      processed_routes[[route_no]] <- process_route(route = route, priors = priors, line_id = route_no, row_no = row_no, distance = distance, spatial = spatial)
+      processed_routes[[route_no]] <- process_route(route = route, priors = priors, route_no = route_no, row_no = row_no, distance = distance, spatial = spatial)
 
     }
 

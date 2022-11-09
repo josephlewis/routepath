@@ -4,14 +4,16 @@
 \alias{global_wlc}
 \title{Global Weighted Linear Combination}
 \usage{
-global_wlc(x, global_weight, FUN = NULL)
+global_wlc(x, global_weight, max_value, FUN = NULL)
 }
 \arguments{
 \item{x}{\code{conductanceMatrix}}
 
 \item{global_weight}{\code{numeric} importance of factor. Value must be between 0 and 1}
 
-\item{FUN}{\code{function} function applied to standardised conductanceMatrix values}
+\item{max_value}{\code{numeric} value used when scaling conductanceMatrix to between 0 and 1. The specified max_value should be the maximum value possible within the supplied conductanceMatrix or the SpatRaster that the conductanceMatrix is croppped from}
+
+\item{FUN}{\code{function} if function supplied (default NULL) then this function is applied to the standardised conductanceMatrix values}
 }
 \value{
 \code{conductanceMatrix}

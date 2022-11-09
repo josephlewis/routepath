@@ -4,12 +4,14 @@
 \alias{rescale_cs_global}
 \title{rescale conductanceMatrix based on global range of values}
 \usage{
-rescale_cs_global(x, FUN = NULL)
+rescale_cs_global(x, FUN = NULL, max_value)
 }
 \arguments{
 \item{x}{\code{conductanceMatrix}}
 
 \item{FUN}{\code{function} function applied to standardised conductanceMatrix values}
+
+\item{max_value}{\code{numeric} value used when scaling conductanceMatrix to between 0 and 1. The specified max_value should be the maximum value possible within the supplied conductanceMatrix or the SpatRaster that the conductanceMatrix is croppped from}
 }
 \value{
 \code{conductanceMatrix} standardised conductanceMatrix with a maximum value of 1 and minimum value relative to 0

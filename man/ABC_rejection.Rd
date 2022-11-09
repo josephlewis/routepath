@@ -8,32 +8,32 @@ ABC_rejection(
   input_data,
   model,
   priors,
-  known_route,
-  line_id = 1,
+  known_routes,
   validation = "euclidean",
+  summary_function = NULL,
   tol = NULL,
   ncores = 1,
-  spatial = FALSE
+  spatial = TRUE
 )
 }
 \arguments{
-\item{input_data}{\code{list} Data used in the routepath ABC process}
+\item{input_data}{\code{list} Data used in the routepath ABC modelling procedure}
 
-\item{model}{\code{function} route model to be used when simulating routes. This function requires that a \code{conductanceMatrix} is returned}
+\item{model}{\code{function} Model to be used when simulating routes. This function requires that a \code{conductanceMatrix} is returned}
 
-\item{priors}{\code{Matrix} prior parameter values}
+\item{priors}{\code{Matrix} Prior parameter values}
 
-\item{known_route}{\code{sf line} known route to compare against the simulated routepaths}
-
-\item{line_id}{\code{numeric} value to be included within routepath object. Default value is 1. This can be useful if iteratively modelling known routes and incrementally assigning line ids is required}
+\item{known_routes}{\code{sf line} Known route to compare against the simulated routes}
 
 \item{validation}{\code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
 
-\item{tol}{\code{numeric} maximum distance between simulated routes and known route to be deemed equal. All simulated routes above this value are rejected}
+\item{summary_function}{\code{function} If function supplied (default NULL) then this function is used to summarise the distance measurements for all roads to a single value. if NULL then maximum distance is used (maximum deviation from known route)}
 
-\item{ncores}{\code{numeric} number of cores used during the routepath ABC process. Default number of cores is 1}
+\item{tol}{\code{numeric} Maximum distance between simulated routes and the known route for the two lines to still be deemed equal. All simulated routes and their parameters that result in a simulated route with a maximum distance from the known route above this value are rejected}
 
-\item{spatial}{\code{logical} if TRUE then sf object returned. if FALSE (default) then data.frame object returned}
+\item{ncores}{\code{numeric} Number of cores used during the routepath ABC procedure. Default value is 1}
+
+\item{spatial}{\code{logical} if TRUE (default) then sf object returned. if FALSE then sf geometry is dropped and a data.frame is returned}
 }
 \value{
 \code{routepath}
@@ -56,7 +56,7 @@ sf::st_point(c(1038608, 4100024)),
 crs = terra::crs(r)))
 
 known_route <- leastcostpath::create_lcp(x = slope_cs, origin = locs[1,],
-destination = locs[2,], cost_distance = FALSE)
+                                         destination = locs[2,], cost_distance = FALSE)
 
 input_data <- list(r)
 
@@ -73,8 +73,7 @@ return(slope_cs)
 }
 
 routepath <- ABC_rejection(input_data = input_data, model = model,
-priors = priors, known_route = known_route,
-line_id = 1, validation = "euclidean", tol = NULL)
+priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
 }
 \author{
 Joseph Lewis

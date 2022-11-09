@@ -19,17 +19,17 @@
 #' @author Joseph Lewis
 #'
 
-process_route <- function(route, priors, line_id, row_no = row_no, summary_stat, spatial = spatial) {
+process_route <- function(route, priors, line_id = route_no, row_no = row_no, distance, spatial = spatial) {
 
-  route$line_id <- line_id[1]
+  route$line_id <- line_id
   route$param_row <- row_no
   route <- cbind(route, p = priors[row_no,, drop = FALSE])
-  route$stat <- summary_stat
+  route$distance <- distance
   route$result = "Accept"
 
   # if route cannot be calculate from origin to destination then stats value will be -Inf. Replace this value with NA and then change result to 'Reject'
-  route$stat[is.infinite(route$stat)] <- NA
-  route$result[is.na(route$stat)] <- "Reject"
+  route$distance[is.infinite(route$distance)] <- NA
+  route$result[is.na(route$distance)] <- "Reject"
 
   if (!spatial) {
     route <- sf::st_drop_geometry(route)

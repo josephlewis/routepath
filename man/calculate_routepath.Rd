@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_routepath.R
 \name{calculate_routepath}
 \alias{calculate_routepath}
-\title{Calculates route path from start and end locations of lines using user-supplied cost surface}
+\title{Calculates routepath from origin and destination locations of sf lines using user-supplied conductance surface}
 \usage{
 calculate_routepath(x, locations)
 }
@@ -15,7 +15,7 @@ calculate_routepath(x, locations)
 \code{sf line} least-cost path from origin to destination
 }
 \description{
-calculates the route path from the start and end locations of lines using a user-supplied cost surface
+calculates the routepath from the origin and destination locations of lines using a user-supplied conductance surface
 }
 \author{
 Joseph Lewis

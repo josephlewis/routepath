@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_end_points.R
 \name{extract_end_points}
 \alias{extract_end_points}
-\title{Extract Start and End Points from known_route}
+\title{Extracts origin and destination locations from known_route}
 \usage{
 extract_end_points(known_route)
 }
@@ -10,7 +10,7 @@ extract_end_points(known_route)
 \item{known_route}{\code{sf line} known route}
 }
 \value{
-sf POINT start and end of supplied known_route
+sf POINT origin and destination of supplied known_route
 }
 \description{
 Extracts the origin and destination point from the supplied known route.

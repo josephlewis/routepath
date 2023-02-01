@@ -2,22 +2,25 @@
 % Please edit documentation in R/calculate_distance.R
 \name{calculate_distance}
 \alias{calculate_distance}
-\title{calculates distance between simulated route and known route}
+\title{calculates distance between routepath and known route}
 \usage{
 calculate_distance(route, known_route, validation)
 }
 \arguments{
-\item{route}{\code{sf line} least-cost path}
+\item{route}{\code{sf line} routepath}
 
 \item{known_route}{\code{sf line} known route}
 
 \item{validation}{\code{character} validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
 }
 \value{
-distance betwen simulated route and known route
+\code{numeric} distance between routepath and known route
 }
 \description{
-Calculates distance between simulated route and known route using the validation method chosen
+Calculates distance between routepath and known route using a number of validation methods.
+}
+\details{
+Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
 }
 \author{
 Joseph Lewis

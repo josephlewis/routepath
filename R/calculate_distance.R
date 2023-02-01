@@ -1,14 +1,16 @@
-#' calculates distance between simulated route and known route
+#' calculates distance between routepath and known route
 #'
-#' Calculates distance between simulated route and known route using the validation method chosen
+#' Calculates distance between routepath and known route using a number of validation methods.
 #'
-#' @param route \code{sf line} least-cost path
+#' Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
+#'
+#' @param route \code{sf line} routepath
 #'
 #' @param known_route \code{sf line} known route
 #'
 #' @param validation \code{character} validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
 #'
-#' @return distance betwen simulated route and known route
+#' @return \code{numeric} distance between routepath and known route
 #'
 #' @keywords internal
 #'

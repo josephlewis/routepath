@@ -6,15 +6,15 @@
 #'
 #' @param input_data \code{list} Data used in the routepath ABC modelling procedure
 #'
-#' @param priors \code{Matrix} Prior parameter values
-#'
 #' @param model \code{function} Model to be used when simulating routes. This function requires that a \code{conductanceMatrix} is returned
+#'
+#' @param priors \code{Matrix} Prior parameter values
 #'
 #' @param known_routes \code{sf line} Known routes to compare against the simulated routes
 #'
 #' @param validation \code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
 #'
-#' @param summary_function \code{function} If function supplied (default NULL) then this function is used to summarise the distance measurements for all roads to a single value. if NULL then maximum distance is used (maximum deviation from known route)
+#' @param summary_function \code{function} If function supplied then this function is used to summarise the distance measurements for all modelled roads to a single value. Default is NULL
 #'
 #' @param tol \code{numeric} Maximum distance between simulated routes and the known route for the two lines to still be deemed equal. All simulated routes and their parameters that result in a simulated route with a maximum distance from the known route above this value are rejected
 #'
@@ -30,36 +30,6 @@
 #'
 #' @export
 #'
-#' @examples
-#'
-#' library(leastcostpath)
-#'
-#' r <- terra::rast(system.file("extdata/SICILY_1000m.tif", package="leastcostpath"))
-#' slope_cs <- create_slope_cs(x = r, cost_function = "tobler", neighbours = 4)
-#' locs <- sf::st_sf(geometry = sf::st_sfc(
-#' sf::st_point(c(839769, 4199443)),
-#' sf::st_point(c(1038608, 4100024)),
-#' crs = terra::crs(r)))
-#'
-#' known_route <- leastcostpath::create_lcp(x = slope_cs, origin = locs[1,],
-#'                                          destination = locs[2,], cost_distance = FALSE)
-#'
-#' input_data <- list(r)
-#'
-#' nsims <- 10
-#' priors <- cbind(a = 1, b = rnorm(n = nsims, mean = 3.5, sd = 1),
-#' c = rnorm(n = nsims, mean = 0.05, sd = 0.1))
-#'
-#' model <- function(x, y) {
-#' slope_cs <- leastcostpath::create_slope_cs(x = x[[1]],
-#' cost_function = function(x) {(y[1] * exp(-y[2] * abs(x + y[3]))) / 3.6},
-#' neighbours = 4)
-#'
-#' return(slope_cs)
-#' }
-#'
-#' routepath <- ABC_rejection(input_data = input_data, model = model,
-#' priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
 
 ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", summary_function = NULL, tol = NULL, ncores = 1, spatial = TRUE) {
 
@@ -74,20 +44,21 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
 
     processed_routes <- list()
 
-    for(route_no in 1:nrow(known_routes)) {
+    input_data2 <- lapply(input_data, FUN = function(x) { if (inherits(x, "PackedSpatRaster")) {terra::rast(x)} else {x}})
 
-      road_ext <- sf::st_as_sf(sf::st_buffer(x = sf::st_as_sfc(sf::st_bbox(known_routes[route_no,])), dist = res * 10))
+    for(j in 1:nrow(known_routes)) {
 
-      input_data2 <- lapply(input_data, FUN = function(x) { if (inherits(x, "PackedSpatRaster")) {terra::rast(x)} else {x}})
+      road_ext <- sf::st_as_sf(sf::st_buffer(x = sf::st_as_sfc(sf::st_bbox(known_routes[j,])), dist = res * 10))
+
       input_data3 <- lapply(input_data2, FUN = function(x) { if (inherits(x, "SpatRaster")) {terra::crop(x, road_ext)} else {x}})
 
-      conductanceMatrix <- model(x = input_data3, y = priors[row_no,])
+      conductanceMatrix <- model(x = input_data3, y = priors[row_no,, drop = FALSE])
 
-      points <- extract_end_points(known_route = known_routes[route_no,])
+      points <- extract_end_points(known_route = known_routes[j,])
       route <- calculate_routepath(x = conductanceMatrix, locations = points)
-      distance <- calculate_distance(route = route, known_route = known_routes[route_no,], validation = validation)
+      distance <- calculate_distance(route = route, known_route = known_routes[j,], validation = validation)
 
-      processed_routes[[route_no]] <- process_route(route = route, priors = priors, route_no = route_no, row_no = row_no, distance = distance, spatial = spatial)
+      processed_routes[[j]] <- process_route(route = route, priors = priors, line_id = j, row_no = row_no, distance = distance, spatial = spatial)
 
     }
 
@@ -96,8 +67,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
     if(is.function(summary_function)) {
       processed_routes$stat <- summary_function(processed_routes$distance[!is.na(processed_routes$distance)])
     } else {
-      processed_routes$stat <- max(x = processed_routes$distance, na.rm = TRUE)
-      processed_routes$stat[is.infinite(processed_routes$stat)] <- NA
+      processed_routes$stat <- NA
     }
 
     return(processed_routes)
@@ -114,6 +84,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
   return(routepaths)
 
 }
+
 
 #' @export
 

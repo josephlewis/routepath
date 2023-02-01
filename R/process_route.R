@@ -19,15 +19,15 @@
 #' @author Joseph Lewis
 #'
 
-process_route <- function(route, priors, route_no = route_no, row_no = row_no, distance, spatial = spatial) {
+process_route <- function(route, priors, line_id =j, row_no = row_no, distance, spatial = spatial) {
 
-  route$line_id <- route_no
+  route$line_id <- j
   route$param_row <- row_no
   route <- cbind(route, p = priors[row_no,, drop = FALSE])
   route$distance <- distance
   route$result = "Accept"
 
-  # if route cannot be calculate from origin to destination then stats value will be -Inf. Replace this value with NA and then change result to 'Reject'
+  # if route cannot be calculated from origin to destination then stats value will be -Inf. Replace this value with NA and then change result to 'Reject'
   route$distance[is.infinite(route$distance)] <- NA
   route$result[is.na(route$distance)] <- "Reject"
 

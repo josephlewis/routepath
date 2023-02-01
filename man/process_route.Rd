@@ -7,7 +7,7 @@
 process_route(
   route,
   priors,
-  route_no = route_no,
+  line_id = j,
   row_no = row_no,
   distance,
   spatial = spatial
@@ -18,11 +18,11 @@ process_route(
 
 \item{priors}{\code{Matrix} prior parameter values to be included within routepath object}
 
+\item{line_id}{\code{numeric} value to be included within routepath object}
+
 \item{row_no}{\code{numeric} value to be included within the routepath object. This value corresponds to the row of the prior parameter Matrix. Default is a value of 1}
 
 \item{spatial}{\code{logical} if TRUE then sf object returned. if FALSE (default) then data.frame object returned}
-
-\item{line_id}{\code{numeric} value to be included within routepath object}
 
 \item{summary_stat}{\code{numeric} distance betwen simulated route and known route to be included within routepath object}
 }

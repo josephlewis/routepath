@@ -9,9 +9,9 @@ global_wlc(x, global_weight, max_value, FUN = NULL)
 \arguments{
 \item{x}{\code{conductanceMatrix}}
 
-\item{global_weight}{\code{numeric} importance of factor. Value must be between 0 and 1}
+\item{global_weight}{\code{numeric} importance of factor. Supplied value must be between 0 and 1}
 
-\item{max_value}{\code{numeric} value used when scaling conductanceMatrix to between 0 and 1. The specified max_value should be the maximum value possible within the supplied conductanceMatrix or the SpatRaster that the conductanceMatrix is croppped from}
+\item{max_value}{\code{numeric} maximum value used when scaling the conductanceMatrix between 0 and 1. The specified max_value should be the maximum value within the conductanceMatrix if each modelled route is to be viewed independently, or the maximum value across all conductanceMatrix, i.e. the whole spatRaster, if to be compared and viewed concurrently}
 
 \item{FUN}{\code{function} if function supplied (default NULL) then this function is applied to the standardised conductanceMatrix values}
 }

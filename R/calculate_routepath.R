@@ -1,6 +1,6 @@
-#' Calculates route path from start and end locations of lines using user-supplied cost surface
+#' Calculates routepath from origin and destination locations of sf lines using user-supplied conductance surface
 #'
-#' calculates the route path from the start and end locations of lines using a user-supplied cost surface
+#' calculates the routepath from the origin and destination locations of lines using a user-supplied conductance surface
 #'
 #' @param x \code{conductanceMatrix}
 #'

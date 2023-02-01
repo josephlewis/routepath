@@ -1,10 +1,10 @@
-#' Extract Start and End Points from known_route
+#' Extracts origin and destination locations from known_route
 #'
 #' Extracts the origin and destination point from the supplied known route.
 #'
 #' @param known_route \code{sf line} known route
 #'
-#' @return sf POINT start and end of supplied known_route
+#' @return sf POINT origin and destination of supplied known_route
 #'
 #' @keywords internal
 #'

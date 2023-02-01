@@ -44,6 +44,37 @@ Launches a series of model simulations using user-supplied prior parameter value
 \details{
 xxx
 }
+\examples{
+
+library(leastcostpath)
+
+r <- terra::rast(system.file("extdata/SICILY_1000m.tif", package="leastcostpath"))
+slope_cs <- create_slope_cs(x = r, cost_function = "tobler", neighbours = 4)
+locs <- sf::st_sf(geometry = sf::st_sfc(
+sf::st_point(c(839769, 4199443)),
+sf::st_point(c(1038608, 4100024)),
+crs = terra::crs(r)))
+
+known_route <- leastcostpath::create_lcp(x = slope_cs, origin = locs[1,],
+                                         destination = locs[2,], cost_distance = FALSE)
+
+input_data <- list(r)
+
+nsims <- 10
+priors <- cbind(a = 1, b = rnorm(n = nsims, mean = 3.5, sd = 1),
+c = rnorm(n = nsims, mean = 0.05, sd = 0.1))
+
+model <- function(x, y) {
+slope_cs <- leastcostpath::create_slope_cs(x = x[[1]],
+cost_function = function(x) {(y[1] * exp(-y[2] * abs(x + y[3]))) / 3.6},
+neighbours = 4)
+
+return(slope_cs)
+}
+
+routepath <- ABC_rejection(input_data = input_data, model = model,
+priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
+}
 \author{
 Joseph Lewis
 }

@@ -19,9 +19,9 @@
 #' @author Joseph Lewis
 #'
 
-process_route <- function(route, priors, line_id =j, row_no = row_no, distance, spatial = spatial) {
+process_route <- function(route, priors, line_id = j, row_no = row_no, distance, spatial = spatial) {
 
-  route$line_id <- j
+  route$line_id <- line_id
   route$param_row <- row_no
   route <- cbind(route, p = priors[row_no,, drop = FALSE])
   route$distance <- distance

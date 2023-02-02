@@ -19,16 +19,16 @@ rescale_cs_global <- function(x, max_value = NULL, FUN = NULL) {
   # explicitly remove zeroes from the conductanceMatrix. This is to ensure that scaling is not impacted by zero values
   x$conductanceMatrix <- Matrix::drop0(x$conductanceMatrix)
 
-  if(is.null(max_val)) {
-    max_val <- base::max(x$conductanceMatrix@x)
+  if(is.null(max_value)) {
+    max_value <- base::max(x$conductanceMatrix@x)
   }
   else {
-    max_val <- max_val
+    max_value <- max_value
     }
 
   # rescales conductanceMatrix to between 0 and 1. Maximum value in conductanceMatrix is given a value of 1 whereas minimum value in conductanceMatrix is given a value relative to when the minimum value is 0
   # This is done to ensure that the minimum value in the conductanceMatrix is not given a value of 0 as this would mean that the minimum value become non-traversable. The minimum value relative to 0 also ensures that all rescaled conductanceMatrix are based on a comparable range
-  x$conductanceMatrix@x <- (((c(0, x$conductanceMatrix@x) - 0) / (max_val - 0)))[-1]
+  x$conductanceMatrix@x <- (((c(0, x$conductanceMatrix@x) - 0) / (max_value - 0)))[-1]
 
   # The above assumes a linear relationship when rescaling the conductanceMatrix. This linear relationship can be modified via a supplied function, e.g. raising to a power
   if(inherits(FUN, "function"))  {

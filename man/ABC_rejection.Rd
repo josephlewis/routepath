@@ -14,7 +14,8 @@ ABC_rejection(
   tol = NULL,
   ncores = 1,
   spatial = TRUE,
-  expand = 10
+  expand = 10,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -36,7 +37,9 @@ ABC_rejection(
 
 \item{spatial}{\code{logical} if TRUE (default) then sf object returned. if FALSE then sf geometry is dropped and a data.frame is returned}
 
-\item{expand}{\code{numeric} Maximum resolution multiplier used to expand the window around the known route when cropping SpatRaster objects in input_data. Default is a value of 10. For example, if the maximum resolution of the SpatRaster object is 100m and the expand value is 10 the window will be buffered by 1,000m (100m*10).}
+\item{expand}{\code{numeric} Maximum resolution multiplier used to expand the window around the known route when cropping SpatRaster objects in input_data. Default is a value of 10. For example, if the maximum resolution of the SpatRaster object is 100m and the expand value is 10 the window will be buffered by 1,000m (100m*10)}
+
+\item{verbose}{\code{logical} if TRUE message returned detailing the current known route number (and percentage) being simulated. Default value is FALSE}
 }
 \value{
 \code{routepath}

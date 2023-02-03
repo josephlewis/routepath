@@ -22,7 +22,9 @@
 #'
 #' @param spatial \code{logical} if TRUE (default) then sf object returned. if FALSE then sf geometry is dropped and a data.frame is returned
 #'
-#' @param expand \code{numeric} Maximum resolution multiplier used to expand the window around the known route when cropping SpatRaster objects in input_data. Default is a value of 10. For example, if the maximum resolution of the SpatRaster object is 100m and the expand value is 10 the window will be buffered by 1,000m (100m*10).
+#' @param expand \code{numeric} Maximum resolution multiplier used to expand the window around the known route when cropping SpatRaster objects in input_data. Default is a value of 10. For example, if the maximum resolution of the SpatRaster object is 100m and the expand value is 10 the window will be buffered by 1,000m (100m*10)
+#'
+#' @param verbose \code{logical} if TRUE message returned detailing the current known route number (and percentage) being simulated. Default value is FALSE
 #'
 #' @return \code{routepath}
 #'
@@ -63,13 +65,17 @@
 #' routepath <- ABC_rejection(input_data = input_data, model = model,
 #' priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
 
-ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", summary_function = NULL, tol = NULL, ncores = 1, spatial = TRUE, expand = 10) {
+ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", summary_function = NULL, tol = NULL, ncores = 1, spatial = TRUE, expand = 10, verbose = FALSE) {
 
   res <- max(terra::res(input_data[[which(sapply(input_data, class) == "SpatRaster")[1]]]))
 
   processed_routes <- list()
 
   for(j in 1:nrow(known_routes)) {
+
+    if(verbose) {
+      message("Simulating Route No: ", j, "/", nrow(known_routes), " (", round(j/nrow(known_routes), 3)*100, "%)")
+    }
 
     myCluster <- parallel::makeCluster(ncores)
     doParallel::registerDoParallel(myCluster)

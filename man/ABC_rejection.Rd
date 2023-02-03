@@ -10,7 +10,6 @@ ABC_rejection(
   priors,
   known_routes,
   validation = "euclidean",
-  summary_function = NULL,
   tol = NULL,
   ncores = 1,
   spatial = TRUE,
@@ -28,8 +27,6 @@ ABC_rejection(
 \item{known_routes}{\code{sf line} Known routes to compare against the simulated routes}
 
 \item{validation}{\code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
-
-\item{summary_function}{\code{function} If function supplied then this function is used to summarise the distance measurements for all modelled roads to a single value. Default is NULL}
 
 \item{tol}{\code{numeric} Maximum distance between simulated routes and the known route for the two lines to still be deemed equal. All simulated routes and their parameters that result in a simulated route with a maximum distance from the known route above this value are rejected}
 

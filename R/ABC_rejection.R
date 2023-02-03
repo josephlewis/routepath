@@ -14,8 +14,6 @@
 #'
 #' @param validation \code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
 #'
-#' @param summary_function \code{function} If function supplied then this function is used to summarise the distance measurements for all modelled roads to a single value. Default is NULL
-#'
 #' @param tol \code{numeric} Maximum distance between simulated routes and the known route for the two lines to still be deemed equal. All simulated routes and their parameters that result in a simulated route with a maximum distance from the known route above this value are rejected
 #'
 #' @param ncores \code{numeric} Number of cores used during the routepath ABC procedure. Default value is 1
@@ -65,7 +63,7 @@
 #' routepath <- ABC_rejection(input_data = input_data, model = model,
 #' priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
 
-ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", summary_function = NULL, tol = NULL, ncores = 1, spatial = TRUE, expand = 10, verbose = FALSE) {
+ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", tol = NULL, ncores = 1, spatial = TRUE, expand = 10, verbose = FALSE) {
 
   res <- max(terra::res(input_data[[which(sapply(input_data, class) == "SpatRaster")[1]]]))
 
@@ -82,8 +80,6 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
                                                  result = NAs,
                                                  geometry = sf::st_sfc(lapply(1, function(x) sf::st_linestring())),
                                                  crs = sf::st_crs(known_routes)))
-
-  processed_routes$stat <- NA
 
   for(j in 1:nrow(known_routes)) {
 
@@ -122,14 +118,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
 
     processed_routes[index_start[j]:index_end[j],] <- routes
 
-    #processed_routes[[j]] <- routes
   }
-
-  #processed_routes2 <- do.call(rbind, processed_routes)
-
-  # if(is.function(summary_function)) {
-  #   processed_routes$stat <- summary_function(processed_routes$distance[!is.na(processed_routes$distance)])
-  # }
 
   if (!is.null(tol)) {
     processed_routes$result[routes$stat >= tol] <- "Reject"

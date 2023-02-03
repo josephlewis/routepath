@@ -22,6 +22,8 @@
 #'
 #' @param spatial \code{logical} if TRUE (default) then sf object returned. if FALSE then sf geometry is dropped and a data.frame is returned
 #'
+#' @param expand \code{numeric} Maximum resolution multiplier used to expand the window around the known route when cropping SpatRaster objects in input_data. Default is a value of 10. For example, if the maximum resolution of the SpatRaster object is 100m and the expand value is 10 the window will be buffered by 1,000m (100m*10).
+#'
 #' @return \code{routepath}
 #'
 #' @author Joseph Lewis
@@ -61,57 +63,58 @@
 #' routepath <- ABC_rejection(input_data = input_data, model = model,
 #' priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
 
-ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", summary_function = NULL, tol = NULL, ncores = 1, spatial = TRUE) {
+ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", summary_function = NULL, tol = NULL, ncores = 1, spatial = TRUE, expand = 10) {
 
-  res <- max(terra::res(input_data[[1]]))
+  res <- max(terra::res(input_data[[which(sapply(input_data, class) == "SpatRaster")[1]]]))
 
-  input_data <- lapply(input_data, FUN = function(x) { if (inherits(x, "SpatRaster")) {terra::wrap(x)} else {x}})
+  processed_routes <- list()
 
-  myCluster <- parallel::makeCluster(ncores)
-  doParallel::registerDoParallel(myCluster)
+  for(j in 1:nrow(known_routes)) {
 
-  routes <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind") %dopar% {
+    myCluster <- parallel::makeCluster(ncores)
+    doParallel::registerDoParallel(myCluster)
 
-    processed_routes <- list()
+    road_ext <- sf::st_as_sf(sf::st_buffer(x = sf::st_as_sfc(sf::st_bbox(known_routes[j,])), dist = res * expand))
 
-    input_data2 <- lapply(input_data, FUN = function(x) { if (inherits(x, "PackedSpatRaster")) {terra::rast(x)} else {x}})
+    input_data1 <- lapply(input_data, FUN = function(x) { if (inherits(x, "SpatRaster")) {terra::crop(x, road_ext)} else {x}})
+    input_data2 <- lapply(input_data1, FUN = function(x) { if (inherits(x, "SpatRaster")) {terra::wrap(x)} else {x}})
 
-    for(j in 1:nrow(known_routes)) {
+    routes <- foreach::foreach(row_no = 1:nrow(priors), .combine = "rbind") %dopar% {
 
-      road_ext <- sf::st_as_sf(sf::st_buffer(x = sf::st_as_sfc(sf::st_bbox(known_routes[j,])), dist = res * 10))
-
-      input_data3 <- lapply(input_data2, FUN = function(x) { if (inherits(x, "SpatRaster")) {terra::crop(x, road_ext)} else {x}})
+      input_data3 <- lapply(input_data2, FUN = function(x) { if (inherits(x, "PackedSpatRaster")) {terra::rast(x)} else {x}})
 
       conductanceMatrix <- model(x = input_data3, y = priors[row_no,, drop = FALSE])
 
       points <- extract_end_points(known_route = known_routes[j,])
-      route <- calculate_routepath(x = conductanceMatrix, locations = points)
+      route <- leastcostpath::create_lcp(x = conductanceMatrix, origin = points[1,], destination = points[2,], cost_distance = FALSE)
       distance <- calculate_distance(route = route, known_route = known_routes[j,], validation = validation)
 
-      processed_routes[[j]] <- process_route(route = route, priors = priors, line_id = j, row_no = row_no, distance = distance, spatial = spatial)
+      route2 <- process_route(route = route, priors = priors, line_id = j, row_no = row_no, distance = distance, spatial = spatial)
+
+      return(route2)
 
     }
 
-    processed_routes <- do.call(rbind, processed_routes)
-
-    if(is.function(summary_function)) {
-      processed_routes$stat <- summary_function(processed_routes$distance[!is.na(processed_routes$distance)])
-    } else {
-      processed_routes$stat <- NA
-    }
-
-    return(processed_routes)
+    parallel::stopCluster(myCluster)
+    processed_routes[[j]] <- routes
   }
 
-  parallel::stopCluster(myCluster)
+  processed_routes2 <- do.call(rbind, processed_routes)
+
+  if(is.function(summary_function)) {
+    processed_routes2$stat <- summary_function(processed_routes$distance[!is.na(processed_routes$distance)])
+  } else {
+    processed_routes2$stat <- NA
+  }
+
 
   if (!is.null(tol)) {
-    routes$result[routes$stat >= tol] <- "Reject"
+    processed_routes2$result[routes$stat >= tol] <- "Reject"
   }
 
-  routepaths <- process_routepaths(routes = routes, model = model, validation = validation, tol = tol)
+  processed_routes3 <- process_routepaths(routes = processed_routes2, model = model, validation = validation, tol = tol)
 
-  return(routepaths)
+  return(processed_routes3)
 
 }
 

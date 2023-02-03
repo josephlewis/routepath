@@ -13,7 +13,8 @@ ABC_rejection(
   summary_function = NULL,
   tol = NULL,
   ncores = 1,
-  spatial = TRUE
+  spatial = TRUE,
+  expand = 10
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ ABC_rejection(
 \item{ncores}{\code{numeric} Number of cores used during the routepath ABC procedure. Default value is 1}
 
 \item{spatial}{\code{logical} if TRUE (default) then sf object returned. if FALSE then sf geometry is dropped and a data.frame is returned}
+
+\item{expand}{\code{numeric} Maximum resolution multiplier used to expand the window around the known route when cropping SpatRaster objects in input_data. Default is a value of 10. For example, if the maximum resolution of the SpatRaster object is 100m and the expand value is 10 the window will be buffered by 1,000m (100m*10).}
 }
 \value{
 \code{routepath}

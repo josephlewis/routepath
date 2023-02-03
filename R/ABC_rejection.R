@@ -69,7 +69,21 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
 
   res <- max(terra::res(input_data[[which(sapply(input_data, class) == "SpatRaster")[1]]]))
 
-  processed_routes <- list()
+  nrows <- nrow(known_routes) * nrow(priors)
+  NAs <- rep(NA, nrows)
+
+  processed_routes <- suppressWarnings(sf::st_sf(costFunction = NAs,
+                                                 fromCell = NAs,
+                                                 toCell = NAs,
+                                                 line_id = NAs,
+                                                 param_row = NAs,
+                                                 p = matrix(NAs, nrow = 1, ncol = 3, byrow = TRUE, dimnames = list(NULL, colnames(priors))),
+                                                 distance = NAs,
+                                                 result = NAs,
+                                                 geometry = sf::st_sfc(lapply(1, function(x) sf::st_linestring())),
+                                                 crs = sf::st_crs(known_routes)))
+
+  processed_routes$stat <- NA
 
   for(j in 1:nrow(known_routes)) {
 
@@ -102,25 +116,28 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
     }
 
     parallel::stopCluster(myCluster)
-    processed_routes[[j]] <- routes
+
+    index_start <- seq(1, nrow(known_routes) * nrow(priors), by = nrow(known_routes) * nrow(priors) / nrow(known_routes))
+    index_end <- seq(nrow(priors), nrow(known_routes) * nrow(priors), by = nrow(priors))
+
+    processed_routes[index_start[j]:index_end[j],] <- routes
+
+    #processed_routes[[j]] <- routes
   }
 
-  processed_routes2 <- do.call(rbind, processed_routes)
+  #processed_routes2 <- do.call(rbind, processed_routes)
 
-  if(is.function(summary_function)) {
-    processed_routes2$stat <- summary_function(processed_routes$distance[!is.na(processed_routes$distance)])
-  } else {
-    processed_routes2$stat <- NA
-  }
-
+  # if(is.function(summary_function)) {
+  #   processed_routes$stat <- summary_function(processed_routes$distance[!is.na(processed_routes$distance)])
+  # }
 
   if (!is.null(tol)) {
-    processed_routes2$result[routes$stat >= tol] <- "Reject"
+    processed_routes$result[routes$stat >= tol] <- "Reject"
   }
 
-  processed_routes3 <- process_routepaths(routes = processed_routes2, model = model, validation = validation, tol = tol)
+  processed_routes2 <- process_routepaths(routes = processed_routes, model = model, validation = validation, tol = tol)
 
-  return(processed_routes3)
+  return(processed_routes2)
 
 }
 

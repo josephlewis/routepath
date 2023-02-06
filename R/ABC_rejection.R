@@ -85,7 +85,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
                                                  line_id = NAs,
                                                  param_row = NAs,
                                                  matrix(NA, nrow = length(NAs), ncol = ncol(priors), byrow = TRUE, dimnames = list(NULL, paste0("p.", colnames(priors)))),
-                                                 s = matrix(NA, nrow = length(NAs), ncol = length(validation), byrow = TRUE, dimnames = list(NULL, paste0("s.", 1:length(validation)))),
+                                                 matrix(NA, nrow = length(NAs), ncol = length(validation), byrow = TRUE, dimnames = list(NULL, paste0("s.", 1:length(validation)))),
                                                  geometry = sf::st_sfc(lapply(1, function(x) sf::st_linestring())),
                                                  crs = sf::st_crs(known_routes)))
 

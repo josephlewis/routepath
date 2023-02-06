@@ -72,8 +72,19 @@ neighbours = 4)
 return(slope_cs)
 }
 
+euclidean_distance <- function(route, known_route) {
+route_pts <- sf::st_cast(route, "POINT", warn = FALSE)
+distance <- max(sf::st_distance(x = route_pts, y = known_route))
+distance <- as.numeric(distance)
+return(distance)
+}
+
 routepath <- ABC_rejection(input_data = input_data, model = model,
 priors = priors, known_routes = known_route, validation = "euclidean")
+
+routepath2 <- ABC_rejection(input_data = input_data, model = model,
+priors = priors, known_routes = known_route,
+validation = list(euclidean_distance, euclidean_distance))
 }
 \author{
 Joseph Lewis

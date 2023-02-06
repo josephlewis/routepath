@@ -58,8 +58,19 @@
 #' return(slope_cs)
 #' }
 #'
+#' euclidean_distance <- function(route, known_route) {
+#' route_pts <- sf::st_cast(route, "POINT", warn = FALSE)
+#' distance <- max(sf::st_distance(x = route_pts, y = known_route))
+#' distance <- as.numeric(distance)
+#' return(distance)
+#' }
+#'
 #' routepath <- ABC_rejection(input_data = input_data, model = model,
 #' priors = priors, known_routes = known_route, validation = "euclidean")
+#'
+#' routepath2 <- ABC_rejection(input_data = input_data, model = model,
+#' priors = priors, known_routes = known_route,
+#' validation = list(euclidean_distance, euclidean_distance))
 
 ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", ncores = 1, spatial = TRUE, expand = 10, verbose = FALSE) {
 
@@ -68,16 +79,13 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
   nrows <- nrow(known_routes) * nrow(priors)
   NAs <- rep(NA, nrows)
 
-  # s = matrix(NAs, nrow = 1, ncol = length(validation), byrow = TRUE, dimnames = list(NULL, 1:length(validation))),
-
   processed_routes <- suppressWarnings(sf::st_sf(costFunction = NAs,
                                                  fromCell = NAs,
                                                  toCell = NAs,
                                                  line_id = NAs,
                                                  param_row = NAs,
-                                                 p = matrix(NAs, nrow = 1, ncol = 3, byrow = TRUE, dimnames = list(NULL, colnames(priors))),
-                                                 distance = NAs,
-                                                 result = NAs,
+                                                 matrix(NA, nrow = length(NAs), ncol = ncol(priors), byrow = TRUE, dimnames = list(NULL, paste0("p.", colnames(priors)))),
+                                                 s = matrix(NA, nrow = length(NAs), ncol = length(validation), byrow = TRUE, dimnames = list(NULL, paste0("s.", 1:length(validation)))),
                                                  geometry = sf::st_sfc(lapply(1, function(x) sf::st_linestring())),
                                                  crs = sf::st_crs(known_routes)))
 
@@ -141,8 +149,4 @@ print.routepath <- function(x, verbose = FALSE) {
     cat("\ntotal no. of simulations per route:", stats::aggregate(x$routes$param_row, list(x$routes$line_id), max)[,2])
   }
   cat("\ntotal no. of parameters:", sum(grepl(pattern = "p.", x = colnames(x$routes), fixed = TRUE)))
-  cat("\npercentage of simulations accepted:", sum(x$routes$result == "Accept") / length(x$routes$result) * 100, "%")
-  if(verbose) {
-    cat("\npercentage of simulations accepted per route:", paste0((stats::aggregate(x$routes$result == "Accept", list(x$routes$line_id), sum)[,2]) / stats::aggregate(x$routes$param_row, list(x$routes$line_id), max)[,2] *100, "%"))
-  }
 }

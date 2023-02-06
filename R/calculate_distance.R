@@ -19,34 +19,26 @@
 
 calculate_distance <- function(route, known_route, validation) {
 
-  # if(is.list(validation)) {
-  #
-  #   if(!all(sapply(validation, is.function))) {
-  #     stop("At least one element in the validation list is not a function")
-  #   }
-  #
-  #   distance <- list()
-  #
-  #   for(v in 1:length(validation)) {
-  #     FUN <- validation[[v]]
-  #     distance[[v]] <- FUN(route, known_route)
-  #   }
-  #
-  #   distance <- do.call(cbind, distance)
-
   sf::st_crs(route) <- sf::st_crs(known_route)
 
-  if (validation == "euclidean") {
-    distance <- euclidean_distance(route, known_route)
-  } else if (validation == "pdi") {
-    distance <- pdi_distance(route, known_route)
-  } else if (validation == "frechet") {
-    distance <- frechet_distance(route, known_route)
-  } else if (validation == "hausdorff") {
-    distance <- hausdorff_distance(route, known_route)
+  if (is.list(validation)) {
+    if (!all(sapply(validation, is.function))) {
+      stop("At least one element in the validation list is not a function")
+    }
+    distance <- list()
+    for (v in 1:length(validation)) {
+      FUN <- validation[[v]]
+      distance[[v]] <- FUN(route, known_route)
+    }
+    distance <- do.call(cbind, distance)
   } else {
-    stop("Validation method not implemented. Implemented methods include: 'euclidean', 'pdi', 'frechet', 'hausdorff'")
+    switch(validation,
+           "euclidean" = {distance <- euclidean_distance(route, known_route)},
+           "pdi" = {distance <- pdi_distance(route, known_route)},
+           "frechet" = {distance <- frechet_distance(route, known_route)},
+           "hausdorff" = {distance <- hausdorff_distance(route, known_route)},
+           stop("Validation method not implemented. Implemented methods include: 'euclidean', 'pdi', 'frechet', 'hausdorff'")
+    )
+    return(distance)
   }
-
-  return(distance)
 }

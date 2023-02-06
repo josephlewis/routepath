@@ -4,7 +4,7 @@
 \alias{process_routepaths}
 \title{Process routepaths}
 \usage{
-process_routepaths(routes, model, validation, tol)
+process_routepaths(routes, model, validation)
 }
 \arguments{
 \item{routes}{\code{sf line} least-cost paths}
@@ -12,8 +12,6 @@ process_routepaths(routes, model, validation, tol)
 \item{model}{\code{function} model function used to create \code{conductanceMatrix} used to calculate least-cost paths}
 
 \item{validation}{\code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
-
-\item{tol}{\code{numeric} maximum distance between simulated routes and known route to be deemed equal. All simulated routes above the maximum value are rejected}
 }
 \value{
 \code{routepath}

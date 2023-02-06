@@ -10,7 +10,6 @@ ABC_rejection(
   priors,
   known_routes,
   validation = "euclidean",
-  tol = NULL,
   ncores = 1,
   spatial = TRUE,
   expand = 10,
@@ -27,8 +26,6 @@ ABC_rejection(
 \item{known_routes}{\code{sf line} Known routes to compare against the simulated routes}
 
 \item{validation}{\code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'}
-
-\item{tol}{\code{numeric} Maximum distance between simulated routes and the known route for the two lines to still be deemed equal. All simulated routes and their parameters that result in a simulated route with a maximum distance from the known route above this value are rejected}
 
 \item{ncores}{\code{numeric} Number of cores used during the routepath ABC procedure. Default value is 1}
 
@@ -76,7 +73,7 @@ return(slope_cs)
 }
 
 routepath <- ABC_rejection(input_data = input_data, model = model,
-priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
+priors = priors, known_routes = known_route, validation = "euclidean")
 }
 \author{
 Joseph Lewis

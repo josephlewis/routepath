@@ -14,8 +14,6 @@
 #'
 #' @param validation \code{character} Validation method used to assess fit of least-cost path against known route. Implemented methods include: 'euclidean' (Default), 'pdi', 'frechet', 'hausdorff'
 #'
-#' @param tol \code{numeric} Maximum distance between simulated routes and the known route for the two lines to still be deemed equal. All simulated routes and their parameters that result in a simulated route with a maximum distance from the known route above this value are rejected
-#'
 #' @param ncores \code{numeric} Number of cores used during the routepath ABC procedure. Default value is 1
 #'
 #' @param spatial \code{logical} if TRUE (default) then sf object returned. if FALSE then sf geometry is dropped and a data.frame is returned
@@ -61,14 +59,16 @@
 #' }
 #'
 #' routepath <- ABC_rejection(input_data = input_data, model = model,
-#' priors = priors, known_routes = known_route, validation = "euclidean", tol = NULL)
+#' priors = priors, known_routes = known_route, validation = "euclidean")
 
-ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", tol = NULL, ncores = 1, spatial = TRUE, expand = 10, verbose = FALSE) {
+ABC_rejection <- function(input_data, model, priors, known_routes, validation = "euclidean", ncores = 1, spatial = TRUE, expand = 10, verbose = FALSE) {
 
   res <- max(terra::res(input_data[[which(sapply(input_data, class) == "SpatRaster")[1]]]))
 
   nrows <- nrow(known_routes) * nrow(priors)
   NAs <- rep(NA, nrows)
+
+  # s = matrix(NAs, nrow = 1, ncol = length(validation), byrow = TRUE, dimnames = list(NULL, 1:length(validation))),
 
   processed_routes <- suppressWarnings(sf::st_sf(costFunction = NAs,
                                                  fromCell = NAs,
@@ -120,12 +120,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
 
   }
 
-  if (!is.null(tol)) {
-    processed_routes$result[routes$stat >= tol] <- "Reject"
-  }
-
-  processed_routes2 <- process_routepaths(routes = processed_routes, model = model, validation = validation, tol = tol)
-
+  processed_routes2 <- process_routepaths(routes = processed_routes, model = model, validation = validation)
   return(processed_routes2)
 
 }
@@ -140,7 +135,6 @@ print.routepath <- function(x, verbose = FALSE) {
   }
   cat("\n")
   cat("\nvalidation method:", x$validation)
-  cat("\ntolerance:", x$tolerance)
   cat("\nno. of routes:", length(unique(x$routes$line_id)))
   cat("\ntotal no. of simulations:", nrow(x$routes))
   if(verbose) {
@@ -149,6 +143,6 @@ print.routepath <- function(x, verbose = FALSE) {
   cat("\ntotal no. of parameters:", sum(grepl(pattern = "p.", x = colnames(x$routes), fixed = TRUE)))
   cat("\npercentage of simulations accepted:", sum(x$routes$result == "Accept") / length(x$routes$result) * 100, "%")
   if(verbose) {
-  cat("\npercentage of simulations accepted per route:", paste0((stats::aggregate(x$routes$result == "Accept", list(x$routes$line_id), sum)[,2]) / stats::aggregate(x$routes$param_row, list(x$routes$line_id), max)[,2] *100, "%"))
+    cat("\npercentage of simulations accepted per route:", paste0((stats::aggregate(x$routes$result == "Accept", list(x$routes$line_id), sum)[,2]) / stats::aggregate(x$routes$param_row, list(x$routes$line_id), max)[,2] *100, "%"))
   }
 }

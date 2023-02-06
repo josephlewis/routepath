@@ -19,6 +19,21 @@
 
 calculate_distance <- function(route, known_route, validation) {
 
+  # if(is.list(validation)) {
+  #
+  #   if(!all(sapply(validation, is.function))) {
+  #     stop("At least one element in the validation list is not a function")
+  #   }
+  #
+  #   distance <- list()
+  #
+  #   for(v in 1:length(validation)) {
+  #     FUN <- validation[[v]]
+  #     distance[[v]] <- FUN(route, known_route)
+  #   }
+  #
+  #   distance <- do.call(cbind, distance)
+
   sf::st_crs(route) <- sf::st_crs(known_route)
 
   if (validation == "euclidean") {

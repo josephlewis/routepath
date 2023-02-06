@@ -27,6 +27,16 @@ process_route <- function(route, priors, line_id = j, row_no = row_no, distance,
   route$distance <- distance
   route$result = "Accept"
 
+  # route <- cbind(route, s = distance)
+  #
+  # # if route cannot be calculated from origin to destination then stats value will be -Inf. Replace this distance value with NA
+  # s_cols <- grep("^s\\.", colnames(route))
+  #
+  # for(s in s_cols) {
+  #   route[[s]][is.infinite(route[[s]])] <- NA
+  # }
+
+
   # if route cannot be calculated from origin to destination then stats value will be -Inf. Replace this value with NA and then change result to 'Reject'
   route$distance[is.infinite(route$distance)] <- NA
   route$result[is.na(route$distance)] <- "Reject"

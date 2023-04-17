@@ -14,13 +14,13 @@
 #'
 #' @export
 
-global_wlc <- function(x, global_weight, max_value, FUN = NULL) {
+global_wlc <- function(x, global_weight, max_value = NULL, FUN = NULL) {
 
   # rescale to between 0 and 1
   x <- rescale_cs_global(x = x, FUN = FUN, max_value)
 
   # multiply by user-supplied criterion global weight
-  x$conductanceMatrix <- x$conductanceMatrix * global_weight
+  x$conductanceMatrix@x <- x$conductanceMatrix@x * global_weight
 
   return(x)
 

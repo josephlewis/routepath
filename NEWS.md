@@ -1,3 +1,7 @@
+# 0.1.8 (17th April 2023)
+* Code for local_wlc, local_weights_cs, and rescale_cs_local now return correct values
+* Amended global_wlc to not require FUN argument
+
 # 0.1.7 (01st February 2023)
 * Updated global_wlc and local_wlc to work without gdistance
 * Updated documentation

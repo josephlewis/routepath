@@ -14,7 +14,7 @@
 #'
 #' @export
 
-rescale_cs_global <- function(x, max_value = NULL, FUN = NULL) {
+rescale_cs_global <- function(x, max_value, FUN = NULL) {
 
   # explicitly remove zeroes from the conductanceMatrix. This is to ensure that scaling is not impacted by zero values
   x$conductanceMatrix <- Matrix::drop0(x$conductanceMatrix)

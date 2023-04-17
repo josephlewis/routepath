@@ -4,7 +4,7 @@
 \alias{rescale_cs_global}
 \title{rescale conductanceMatrix based on global range of values}
 \usage{
-rescale_cs_global(x, max_value = NULL, FUN = NULL)
+rescale_cs_global(x, max_value, FUN = NULL)
 }
 \arguments{
 \item{x}{\code{conductanceMatrix}}

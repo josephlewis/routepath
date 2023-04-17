@@ -4,15 +4,19 @@
 \alias{rescale_cs_local}
 \title{rescale conductanceMatrix based on global range of values}
 \usage{
-rescale_cs_local(x, max_value = NULL, FUN = NULL)
+rescale_cs_local(x, FUN = NULL)
 }
 \arguments{
 \item{x}{\code{conductanceMatrix}}
 
-\item{max_value}{\code{numeric} maximum value used when scaling the conductanceMatrix between 0 and 1. The specified max_value should be the maximum value within the conductanceMatrix if each modelled route is to be viewed independently, or the maximum value across all conductanceMatrix, i.e. the whole spatRaster, if multiple modelled routes to be compared and viewed concurrently. If max_value is NULL (default) max_value is the maximum value within the supplied conductanceMatrix}
-
 \item{FUN}{\code{function} function applied to standardised conductanceMatrix values}
+}
+\value{
+\code{conductanceMatrix}
 }
 \description{
 rescale conductanceMatrix based on global range of values
+}
+\author{
+Joseph Lewis
 }

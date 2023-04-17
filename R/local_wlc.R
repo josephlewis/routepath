@@ -2,19 +2,22 @@
 #'
 #' @param x \code{conductanceMatrix}
 #'
-#' @param global_weight \code{numeric} importance of factor. Supplied value must be between 0 and 1
-#'
-#' @param max_value \code{numeric} maximum value used when scaling the conductanceMatrix between 0 and 1. The specified max_value should be the maximum value within the conductanceMatrix if each modelled route is to be viewed independently, or the maximum value across all conductanceMatrix, i.e. the whole spatRaster, if multiple modelled routes to be compared and viewed concurrently. If max_value is NULL (default) max_value is the maximum value within the supplied conductanceMatrix
+#' @param global_weight \code{numeric} Importance of factor. Supplied value must be between 0 and 1
 #'
 #' @param FUN \code{function} function applied to standardised conductanceMatrix values
+#'
+#' @return \code{conductanceMatrix}
+#'
+#' @author Joseph Lewis
+#'
+#' @export
 
-
-local_wlc <- function(x, global_weight, max_value = NULL, FUN = NULL) {
+local_wlc <- function(x, global_weight, FUN = NULL) {
 
   local_weights <- local_weights_cs(x = x, global_weight = global_weight)
-  local_cs <- rescale_cs_local(x = x, FUN = FUN, max_value = max_value)
+  local_cs <- rescale_cs_local(x = x, FUN = FUN)
 
-  x$conductanceMatrix <- local_cs$conductanceMatrix * local_weights$conductanceMatrix
+  x$conductanceMatrix@x <- local_cs$conductanceMatrix@x * local_weights$conductanceMatrix@x
 
   return(x)
 

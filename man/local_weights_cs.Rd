@@ -11,6 +11,12 @@ local_weights_cs(x, global_weight)
 
 \item{global_weight}{\code{numeric} importance of factor. Supplied value must be between 0 and 1}
 }
+\value{
+\code{conductanceMatrix}
+}
 \description{
 rescale conductanceMatrix based on global range of values
+}
+\author{
+Joseph Lewis
 }

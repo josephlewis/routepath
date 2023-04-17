@@ -4,7 +4,7 @@
 \alias{global_wlc}
 \title{Global Weighted Linear Combination}
 \usage{
-global_wlc(x, global_weight, max_value, FUN = NULL)
+global_wlc(x, global_weight, max_value = NULL, FUN = NULL)
 }
 \arguments{
 \item{x}{\code{conductanceMatrix}}

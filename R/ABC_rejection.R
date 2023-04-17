@@ -110,7 +110,7 @@ ABC_rejection <- function(input_data, model, priors, known_routes, validation = 
       conductanceMatrix <- model(x = input_data3, y = priors[row_no,, drop = FALSE])
 
       points <- extract_end_points(known_route = known_routes[j,])
-      route <- leastcostpath::create_lcp(x = conductanceMatrix, origin = points[1,], destination = points[2,], cost_distance = FALSE)
+      route <- leastcostpath::create_lcp(x = conductanceMatrix, origin = points[1,], destination = points[2,], cost_distance = FALSE, check_locations = FALSE)
       distance <- calculate_distance(route = route, known_route = known_routes[j,], validation = validation)
 
       route2 <- process_route(route = route, priors = priors, line_id = j, row_no = row_no, distance = distance, spatial = spatial)
